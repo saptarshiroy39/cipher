@@ -16,7 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
+import ModeSelector, { type InputMode } from "@/components/ModeSelector";
+import DirectTextInput from "@/components/DirectTextInput";
 import FileSelector, { truncateFilename } from "@/components/FileSelector";
+import ResultPreview from "@/components/ResultPreview";
 import {
   IconCheck,
   IconClock,
@@ -41,8 +44,11 @@ export default function Attack() {
   const [state, setState] = useState<State>("idle");
   const [cipherMethod, setCipherMethod] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [inputMode, setInputMode] = useState<InputMode>("file");
+  const [rawText, setRawText] = useState("");
   const [downloadFiles, setDownloadFiles] = useState<DownloadFile[]>([]);
   const [guessedKey, setGuessedKey] = useState<string | null>(null);
+  const [guessedPlaintext, setGuessedPlaintext] = useState<string | null>(null);
   const [timeTaken, setTimeTaken] = useState<number | null>(null);
   const [keyCopied, setKeyCopied] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -53,6 +59,39 @@ export default function Attack() {
     setFile(f);
   }, []);
 
+  const handleModeChange = useCallback(
+    (newMode: InputMode) => {
+      if (state === "processing" || newMode === inputMode) return;
+      setInputMode(newMode);
+      if (clearFilesRef.current) clearFilesRef.current();
+      setRawText("");
+      setFile(null);
+      if (state === "done" || state === "error") {
+        setState("idle");
+        downloadFiles.forEach((f) => window.URL.revokeObjectURL(f.url));
+        setDownloadFiles([]);
+        setGuessedKey(null);
+        setGuessedPlaintext(null);
+        setTimeTaken(null);
+        setProgress(0);
+        setProgressStatus("");
+      }
+    },
+    [inputMode, state, downloadFiles],
+  );
+
+  const handleTextChange = useCallback((text: string) => {
+    setRawText(text);
+    if (text.trim().length > 0) {
+      const generatedFile = new File([text], "ciphertext.txt", {
+        type: "text/plain",
+      });
+      setFile(generatedFile);
+    } else {
+      setFile(null);
+    }
+  }, []);
+
   const handleSetClear = useCallback((clearFn: () => void) => {
     clearFilesRef.current = clearFn;
   }, []);
@@ -60,11 +99,13 @@ export default function Attack() {
   const handleClear = useCallback(() => {
     downloadFiles.forEach((f) => window.URL.revokeObjectURL(f.url));
     if (clearFilesRef.current) clearFilesRef.current();
+    setRawText("");
     setState("idle");
     setCipherMethod(null);
     setFile(null);
     setDownloadFiles([]);
     setGuessedKey(null);
+    setGuessedPlaintext(null);
     setTimeTaken(null);
     setProgress(0);
     setProgressStatus("");
@@ -143,6 +184,7 @@ export default function Attack() {
       const baseName = file.name.replace(/\.[^.]+$/, "");
 
       if (data.guessed_plaintext) {
+        setGuessedPlaintext(data.guessed_plaintext);
         const blob = new Blob([data.guessed_plaintext], { type: "text/plain" });
         files.push({
           url: window.URL.createObjectURL(blob),
@@ -194,41 +236,61 @@ export default function Attack() {
 
   return (
     <>
-      <Header backButton animation titleText="Frequency Analysis Attack" />
-      <main className="flex flex-col justify-center items-center gap-6 md:gap-10 p-4 md:p-6 w-full">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-10 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
-          <FileSelector
-            titleText="Add Ciphertext File"
-            setFile={handleFileChange}
-            state={state}
-            className="w-full"
-            onClearFilesReady={handleSetClear}
-          />
-          <div className="flex flex-col justify-evenly items-center gap-6 md:gap-13 w-full">
-            <Field>
-              <FieldLabel htmlFor="cipher-method-select">
-                Cipher Method
-              </FieldLabel>
-              <Select
-                value={cipherMethod || ""}
-                onValueChange={setCipherMethod}
-                disabled={state !== "idle"}
-              >
-                <SelectTrigger id="cipher-method-select" className="w-full">
-                  <SelectValue placeholder="Select cipher method" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectGroup>
-                    <SelectItem value="caesar">Caesar Cipher</SelectItem>
-                    <SelectItem value="permute">Permutation Cipher</SelectItem>
-                    <SelectItem value="vigenere">Vigenère Cipher</SelectItem>
-                    <SelectItem value="hill">Hill Cipher (2x2)</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
+      <Header backButton animation titleText="FREQUENCY ANALYSIS ATTACK" />
+      <main className="flex flex-col justify-center items-center gap-4 md:gap-5 p-4 md:p-6 w-full">
+        <ModeSelector
+          mode={inputMode}
+          onModeChange={handleModeChange}
+          disabled={state === "processing"}
+          className="max-w-6xl"
+        />
 
-            {
+        <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-10 w-full">
+            {inputMode === "file" ? (
+              <FileSelector
+                titleText="Add Ciphertext File"
+                label="CIPHERTEXT"
+                setFile={handleFileChange}
+                state={state}
+                className="w-full"
+                onClearFilesReady={handleSetClear}
+              />
+            ) : (
+              <DirectTextInput
+                title="Ciphertext"
+                value={rawText}
+                onChange={handleTextChange}
+                placeholder="Type or paste intercepted ciphertext to attack..."
+                disabled={state !== "idle"}
+              />
+            )}
+            <div className="flex flex-col justify-center items-center gap-6 w-full">
+              <Field>
+                <FieldLabel htmlFor="cipher-method-select">
+                  Cipher Method
+                </FieldLabel>
+                <Select
+                  value={cipherMethod || ""}
+                  onValueChange={setCipherMethod}
+                  disabled={state !== "idle"}
+                >
+                  <SelectTrigger id="cipher-method-select" className="w-full">
+                    <SelectValue placeholder="Select cipher method" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectGroup>
+                      <SelectItem value="caesar">Caesar Cipher</SelectItem>
+                      <SelectItem value="permute">
+                        Permutation Cipher
+                      </SelectItem>
+                      <SelectItem value="vigenere">Vigenère Cipher</SelectItem>
+                      <SelectItem value="hill">Hill Cipher (2x2)</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+
               <div className="flex flex-col gap-2 w-full h-8">
                 {(state === "processing" || state === "done") && (
                   <>
@@ -240,143 +302,159 @@ export default function Attack() {
                   </>
                 )}
               </div>
-            }
+            </div>
+          </div>
 
-            <Field className="grid grid-cols-5 mt-2">
-              <Button
-                className="col-span-3 w-full leading-none"
-                disabled={state !== "idle" || !file || !cipherMethod}
-                onClick={handleAttack}
-              >
-                {state === "processing" ? (
-                  <>
-                    <IconLoader
-                      className="size-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                    ATTACKING...
-                  </>
-                ) : state === "done" ? (
-                  <>
-                    <IconCheck className="size-4" aria-hidden="true" />
-                    ATTACKED
-                  </>
-                ) : state === "error" ? (
-                  <>
-                    <IconX className="size-4" aria-hidden="true" />
-                    FAILED
-                  </>
-                ) : (
-                  <>
-                    <IconSkull className="size-4" aria-hidden="true" />
-                    ATTACK
-                  </>
-                )}
-              </Button>
-              <Button
-                className="col-span-2 w-full leading-none"
-                variant="destructive"
-                disabled={
-                  state === "processing" ||
-                  state === "done" ||
-                  (file === null && !cipherMethod)
-                }
-                onClick={handleClear}
-              >
-                <IconReload className="size-4" aria-hidden="true" />
-                RESET
-              </Button>
-            </Field>
+          <div className="grid grid-cols-5 gap-2 w-full mt-2">
+            <Button
+              className="col-span-3 w-full leading-none"
+              disabled={state !== "idle" || !file || !cipherMethod}
+              onClick={handleAttack}
+            >
+              {state === "processing" ? (
+                <>
+                  <IconLoader
+                    className="size-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                  ATTACKING...
+                </>
+              ) : state === "done" ? (
+                <>
+                  <IconCheck className="size-4" aria-hidden="true" />
+                  ATTACKED
+                </>
+              ) : state === "error" ? (
+                <>
+                  <IconX className="size-4" aria-hidden="true" />
+                  FAILED
+                </>
+              ) : (
+                <>
+                  <IconSkull className="size-4" aria-hidden="true" />
+                  ATTACK
+                </>
+              )}
+            </Button>
+            <Button
+              className="col-span-2 w-full leading-none"
+              variant="destructive"
+              disabled={state === "processing"}
+              onClick={handleClear}
+            >
+              <IconReload className="size-4" aria-hidden="true" />
+              RESET
+            </Button>
           </div>
         </div>
 
         {state === "done" && downloadFiles.length > 0 && (
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
-            <div className="flex flex-col justify-center items-start gap-5 text-sm text-muted-foreground w-full">
-              {guessedKey && (
-                <div className="flex flex-row flex-wrap justify-start items-center gap-1">
-                  <span className="flex justify-center items-center gap-1 leading-none">
-                    <IconKey
-                      className="size-4 inline-block"
+          <>
+            {guessedPlaintext && (
+              <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+                <ResultPreview
+                  title="RECOVERED PLAINTEXT"
+                  content={guessedPlaintext}
+                />
+              </div>
+            )}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-10 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+              <div className="flex flex-col justify-center items-start gap-4 text-xs w-full">
+                {guessedKey && (
+                  <div className="flex flex-row flex-wrap justify-start items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 leading-none font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconKey
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      GUESSED KEY:
+                    </span>
+                    <span className="flex items-center gap-1.5 leading-none font-mono text-muted-foreground">
+                      {guessedKey}
+                      <Button
+                        size="icon-lg"
+                        variant="ghost"
+                        className="size-4"
+                        onClick={() => {
+                          navigator.clipboard.writeText(guessedKey || "");
+                          setKeyCopied(true);
+                          setTimeout(() => setKeyCopied(false), 2000);
+                        }}
+                        aria-label="Copy key to clipboard"
+                      >
+                        {keyCopied ? (
+                          <IconCheck className="size-4 text-green-500" aria-hidden="true" />
+                        ) : (
+                          <IconCopy className="size-4" aria-hidden="true" />
+                        )}
+                      </Button>
+                    </span>
+                  </div>
+                )}
+
+                {timeTaken !== null && (
+                  <div className="flex items-center gap-1.5 leading-none">
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconClock
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      TIME TAKEN:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {timeTaken.toFixed(2)} seconds
+                    </span>
+                  </div>
+                )}
+
+                {downloadFiles.map((dlFile) => (
+                  <div
+                    key={dlFile.filename}
+                    className="flex items-center gap-1.5 leading-none"
+                  >
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconFileInfo
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      {dlFile.label.toUpperCase()} FILE SIZE:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {formatBytes(dlFile.size)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4 w-full">
+                {downloadFiles.map((dlFile) => (
+                  <Button
+                    key={dlFile.filename}
+                    title={dlFile.filename}
+                    className="w-full leading-none"
+                    variant="outline"
+                    onClick={() => handleDownload(dlFile)}
+                  >
+                    <IconDownload
+                      className="size-4 shrink-0"
                       aria-hidden="true"
                     />
-                    Guessed Key:
-                  </span>
-                  <span className="flex justify-center items-center gap-1.5 leading-none">
-                    {guessedKey}
-                    <Button
-                      size="icon-lg"
-                      variant="ghost"
-                      className="size-4"
-                      onClick={() => {
-                        navigator.clipboard.writeText(guessedKey || "");
-                        setKeyCopied(true);
-                        setTimeout(() => setKeyCopied(false), 2000);
-                      }}
-                      aria-label="Copy key to clipboard"
-                    >
-                      {keyCopied ? (
-                        <IconCheck className="size-4" aria-hidden="true" />
-                      ) : (
-                        <IconCopy className="size-4" aria-hidden="true" />
-                      )}
-                    </Button>
-                  </span>
-                </div>
-              )}
+                    <span className="truncate">
+                      {truncateFilename(dlFile.filename)}
+                    </span>
+                  </Button>
+                ))}
 
-              {timeTaken !== null && (
-                <div className="flex items-center gap-1 leading-none">
-                  <IconClock
-                    className="size-4 inline-block"
-                    aria-hidden="true"
-                  />
-                  Time Taken: {timeTaken.toFixed(2)} seconds
-                </div>
-              )}
-
-              {downloadFiles.map((dlFile) => (
-                <div
-                  key={dlFile.filename}
-                  className="flex items-center gap-1 leading-none"
-                >
-                  <IconFileInfo
-                    className="size-4 inline-block"
-                    aria-hidden="true"
-                  />
-                  {dlFile.label} File Size: {formatBytes(dlFile.size)}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col justify-center items-center gap-4 w-full">
-              {downloadFiles.map((dlFile) => (
                 <Button
-                  key={dlFile.filename}
-                  title={dlFile.filename}
-                  className="w-full leading-none"
+                  className="text-destructive hover:text-destructive/80 w-full leading-none"
                   variant="outline"
-                  onClick={() => handleDownload(dlFile)}
+                  onClick={handleClear}
                 >
-                  <IconDownload
-                    className="size-4 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="truncate">
-                    {truncateFilename(dlFile.filename)}
-                  </span>
+                  <IconReload className="size-4" aria-hidden="true" />
+                  ATTACK AGAIN
                 </Button>
-              ))}
-
-              <Button
-                className="text-destructive hover:text-destructive/80 w-full leading-none"
-                variant="outline"
-                onClick={handleClear}
-              >
-                <IconReload className="size-4" aria-hidden="true" />
-                ATTACK ANOTHER FILE
-              </Button>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {state === "error" && (

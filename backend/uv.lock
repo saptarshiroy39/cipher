@@ -56,7 +56,7 @@ wheels = [
 
 [[package]]
 name = "cipher-backend"
-version = "1.5.0"
+version = "2.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
@@ -78,7 +78,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.10.5" },
     { name = "pydantic-settings", specifier = ">=2.13.1" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
-    { name = "sizelib", specifier = ">=0.2.3" },
+    { name = "sizelib", specifier = ">=0.4.0" },
     { name = "sse-starlette", specifier = ">=2.1.0" },
     { name = "websockets", specifier = ">=16.0" },
 ]
@@ -809,11 +809,11 @@ wheels = [
 
 [[package]]
 name = "sizelib"
-version = "0.2.3"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/af/13/0de7a3bd33eb61d15e4885b2b5650d9b716ccd92728db03f998c52d50411/sizelib-0.2.3.tar.gz", hash = "sha256:a5a53b22f5517ba80f2d96a6bc2f5fd06f7cab0b8bba70086cdeaa82d6ce244f", size = 6781, upload-time = "2026-08-12T12:57:41.586Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/16/54/ca55632ae175c7d68acfe6c042cc4e82a19f3eb52ab42361758eca6f8a66/sizelib-0.4.0.tar.gz", hash = "sha256:8c64d0cbeb6950c25534c8aacba9a8bdb5ab5fd4f9d767079f7401bcd98a5c72", size = 9927, upload-time = "2026-09-03T03:40:12.611Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/05/55/00260662f5f4089b69c981f036c93ab00a8de1dd51f8626cbb5176553b78/sizelib-0.2.3-py3-none-any.whl", hash = "sha256:f502bf0d0b1f91780ea8e3c0378100e26a8495d211b6ff00c322a2bfb62929af", size = 5514, upload-time = "2026-08-12T12:57:40.455Z" },
+    { url = "https://files.pythonhosted.org/packages/48/29/7d680de659d6749a09cb5493d4499406a88a30847c17d54823721201eeac/sizelib-0.4.0-py3-none-any.whl", hash = "sha256:b62f37aaeaf20662d19bcc6d8c922ae49d68e16fe3449d93a8316ecdc950fa35", size = 8293, upload-time = "2026-09-03T03:40:11.462Z" },
 ]
 
 [[package]]

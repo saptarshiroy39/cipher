@@ -1,12 +1,13 @@
 "use client";
 
-import React, {
+import {
   useCallback,
   useRef,
   useState,
   type ChangeEvent,
   type DragEvent,
   type InputHTMLAttributes,
+  type Ref,
 } from "react";
 
 export type FileMetadata = {
@@ -20,17 +21,15 @@ export type FileMetadata = {
 export type FileWithPreview = {
   file: File | FileMetadata;
   id: string;
-  preview?: string;
 };
 
 export type FileUploadOptions = {
-  maxFiles?: number; // Only used when multiple is true, defaults to Infinity
+  maxFiles?: number;
   maxSize?: number; // in bytes
   accept?: string;
-  multiple?: boolean; // Defaults to false
+  multiple?: boolean;
   initialFiles?: FileMetadata[];
-  onFilesChange?: (files: FileWithPreview[]) => void; // Callback when files change
-  onFilesAdded?: (addedFiles: FileWithPreview[]) => void; // Callback when new files are added
+  onFilesChange?: (files: FileWithPreview[]) => void;
 };
 
 export type FileUploadState = {
@@ -53,8 +52,17 @@ export type FileUploadActions = {
   getInputProps: (
     props?: InputHTMLAttributes<HTMLInputElement>,
   ) => InputHTMLAttributes<HTMLInputElement> & {
-    ref: React.Ref<HTMLInputElement>;
+    ref: Ref<HTMLInputElement>;
   };
+};
+
+export const formatBytes = (bytes: number, decimals = 2): string => {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i] ?? "Bytes"}`;
 };
 
 export const useFileUpload = (
@@ -67,14 +75,12 @@ export const useFileUpload = (
     multiple = false,
     initialFiles = [],
     onFilesChange,
-    onFilesAdded,
   } = options;
 
   const [state, setState] = useState<FileUploadState>({
     files: initialFiles.map((file) => ({
       file,
       id: file.id,
-      preview: file.url,
     })),
     isDragging: false,
     errors: [],
@@ -84,32 +90,20 @@ export const useFileUpload = (
 
   const validateFile = useCallback(
     (file: File | FileMetadata): string | null => {
-      if (file instanceof File) {
-        if (file.size > maxSize) {
-          return `File "${file.name}" exceeds the maximum size of ${formatBytes(
-            maxSize,
-          )}.`;
-        }
-      } else {
-        if (file.size > maxSize) {
-          return `File "${file.name}" exceeds the maximum size of ${formatBytes(
-            maxSize,
-          )}.`;
-        }
+      if (file.size > maxSize) {
+        return `File "${file.name}" exceeds the maximum size of ${formatBytes(maxSize)}.`;
       }
 
       if (accept !== "*") {
         const acceptedTypes = accept.split(",").map((type) => type.trim());
-        const fileType = file instanceof File ? file.type || "" : file.type;
-        const fileExtension = `.${
-          file instanceof File
-            ? file.name.split(".").pop()
-            : file.name.split(".").pop()
-        }`;
+        const fileType = file.type || "";
+        const dotIndex = file.name.lastIndexOf(".");
+        const fileExtension =
+          dotIndex !== -1 ? file.name.slice(dotIndex).toLowerCase() : "";
 
         const isAccepted = acceptedTypes.some((type) => {
           if (type.startsWith(".")) {
-            return fileExtension.toLowerCase() === type.toLowerCase();
+            return fileExtension === type.toLowerCase();
           }
           if (type.endsWith("/*")) {
             const baseType = type.split("/")[0];
@@ -119,9 +113,7 @@ export const useFileUpload = (
         });
 
         if (!isAccepted) {
-          return `File "${
-            file instanceof File ? file.name : file.name
-          }" is not an accepted file type.`;
+          return `File "${file.name}" is not an accepted file type.`;
         }
       }
 
@@ -130,48 +122,17 @@ export const useFileUpload = (
     [accept, maxSize],
   );
 
-  const createPreview = useCallback(
-    (file: File | FileMetadata): string | undefined => {
-      if (file instanceof File) {
-        return URL.createObjectURL(file);
-      }
-      return file.url;
-    },
-    [],
-  );
-
-  const generateUniqueId = useCallback((file: File | FileMetadata): string => {
-    if (file instanceof File) {
-      return `${file.name}-${Date.now()}-${Math.random()
-        .toString(36)
-        .substring(2, 9)}`;
-    }
-    return file.id;
-  }, []);
-
   const clearFiles = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
     setState((prev) => {
-      // Clean up object URLs
-      prev.files.forEach((file) => {
-        if (
-          file.preview &&
-          file.file instanceof File &&
-          file.file.type.startsWith("image/")
-        ) {
-          URL.revokeObjectURL(file.preview);
-        }
-      });
-
-      if (inputRef.current) {
-        inputRef.current.value = "";
-      }
-
       const newState = {
         ...prev,
         files: [],
         errors: [],
       };
-
       onFilesChange?.(newState.files);
       return newState;
     });
@@ -184,15 +145,10 @@ export const useFileUpload = (
       const newFilesArray = Array.from(newFiles);
       const errors: string[] = [];
 
-      // Clear existing errors when new files are uploaded
-      setState((prev) => ({ ...prev, errors: [] }));
-
-      // In single file mode, clear existing files first
       if (!multiple) {
         clearFiles();
       }
 
-      // Check if adding these files would exceed maxFiles (only in multiple mode)
       if (
         multiple &&
         maxFiles !== Infinity &&
@@ -205,29 +161,14 @@ export const useFileUpload = (
 
       const validFiles: FileWithPreview[] = [];
 
-      newFilesArray.forEach((file) => {
-        // Only check for duplicates if multiple files are allowed
+      for (const file of newFilesArray) {
         if (multiple) {
           const isDuplicate = state.files.some(
-            (existingFile) =>
-              existingFile.file.name === file.name &&
-              existingFile.file.size === file.size,
+            (existing) =>
+              existing.file.name === file.name &&
+              existing.file.size === file.size,
           );
-
-          // Skip duplicate files silently
-          if (isDuplicate) {
-            return;
-          }
-        }
-
-        // Check file size
-        if (file.size > maxSize) {
-          errors.push(
-            multiple
-              ? `Some files exceed the maximum size of ${formatBytes(maxSize)}.`
-              : `File exceeds the maximum size of ${formatBytes(maxSize)}.`,
-          );
-          return;
+          if (isDuplicate) continue;
         }
 
         const error = validateFile(file);
@@ -236,70 +177,39 @@ export const useFileUpload = (
         } else {
           validFiles.push({
             file,
-            id: generateUniqueId(file),
-            preview: createPreview(file),
+            id: `${file.name}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
           });
         }
-      });
+      }
 
-      // Only update state if we have valid files to add
       if (validFiles.length > 0) {
-        // Call the onFilesAdded callback with the newly added valid files
-        onFilesAdded?.(validFiles);
-
         setState((prev) => {
-          const newFiles = !multiple
+          const newFileList = !multiple
             ? validFiles
             : [...prev.files, ...validFiles];
-          onFilesChange?.(newFiles);
+          onFilesChange?.(newFileList);
           return {
             ...prev,
-            files: newFiles,
+            files: newFileList,
             errors,
           };
         });
       } else if (errors.length > 0) {
-        setState((prev) => ({
-          ...prev,
-          errors,
-        }));
+        setState((prev) => ({ ...prev, errors }));
       }
 
-      // Reset input value after handling files
       if (inputRef.current) {
         inputRef.current.value = "";
       }
     },
-    [
-      state.files,
-      maxFiles,
-      multiple,
-      maxSize,
-      validateFile,
-      createPreview,
-      generateUniqueId,
-      clearFiles,
-      onFilesChange,
-      onFilesAdded,
-    ],
+    [state.files, maxFiles, multiple, validateFile, clearFiles, onFilesChange],
   );
 
   const removeFile = useCallback(
     (id: string) => {
       setState((prev) => {
-        const fileToRemove = prev.files.find((file) => file.id === id);
-        if (
-          fileToRemove &&
-          fileToRemove.preview &&
-          fileToRemove.file instanceof File &&
-          fileToRemove.file.type.startsWith("image/")
-        ) {
-          URL.revokeObjectURL(fileToRemove.preview);
-        }
-
         const newFiles = prev.files.filter((file) => file.id !== id);
         onFilesChange?.(newFiles);
-
         return {
           ...prev,
           files: newFiles,
@@ -311,10 +221,7 @@ export const useFileUpload = (
   );
 
   const clearErrors = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      errors: [],
-    }));
+    setState((prev) => ({ ...prev, errors: [] }));
   }, []);
 
   const handleDragEnter = useCallback((e: DragEvent<HTMLElement>) => {
@@ -326,11 +233,7 @@ export const useFileUpload = (
   const handleDragLeave = useCallback((e: DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
-    if (e.currentTarget.contains(e.relatedTarget as Node)) {
-      return;
-    }
-
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
     setState((prev) => ({ ...prev, isDragging: false }));
   }, []);
 
@@ -345,21 +248,10 @@ export const useFileUpload = (
       e.stopPropagation();
       setState((prev) => ({ ...prev, isDragging: false }));
 
-      // Don't process files if the input is disabled
-      if (inputRef.current?.disabled) {
-        return;
-      }
+      if (inputRef.current?.disabled) return;
 
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        // In single file mode, only use the first file
-        if (!multiple) {
-          const file = e.dataTransfer.files[0];
-          if (file) {
-            addFiles([file]);
-          }
-        } else {
-          addFiles(e.dataTransfer.files);
-        }
+        addFiles(!multiple ? [e.dataTransfer.files[0]] : e.dataTransfer.files);
       }
     },
     [addFiles, multiple],
@@ -375,22 +267,18 @@ export const useFileUpload = (
   );
 
   const openFileDialog = useCallback(() => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
+    inputRef.current?.click();
   }, []);
 
   const getInputProps = useCallback(
-    (props: InputHTMLAttributes<HTMLInputElement> = {}) => {
-      return {
-        ...props,
-        type: "file" as const,
-        onChange: handleFileChange,
-        accept: props.accept || accept,
-        multiple: props.multiple !== undefined ? props.multiple : multiple,
-        ref: inputRef,
-      };
-    },
+    (props: InputHTMLAttributes<HTMLInputElement> = {}) => ({
+      ...props,
+      type: "file" as const,
+      onChange: handleFileChange,
+      accept: props.accept || accept,
+      multiple: props.multiple !== undefined ? props.multiple : multiple,
+      ref: inputRef,
+    }),
     [accept, multiple, handleFileChange],
   );
 
@@ -410,20 +298,4 @@ export const useFileUpload = (
       getInputProps,
     },
   ];
-};
-
-// Helper function to format bytes to human-readable format
-export const formatBytes = (bytes: number, decimals = 2): string => {
-  if (bytes === 0) return "0 Bytes";
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return (
-    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) +
-    (sizes[i] ?? " Bytes")
-  );
 };

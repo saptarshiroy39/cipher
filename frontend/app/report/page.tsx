@@ -7,7 +7,10 @@ import { API_URL } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
+import ModeSelector, { type InputMode } from "@/components/ModeSelector";
+import DirectTextInput from "@/components/DirectTextInput";
 import FileSelector, { truncateFilename } from "@/components/FileSelector";
+import ResultPreview from "@/components/ResultPreview";
 import {
   IconCheck,
   IconClock,
@@ -20,8 +23,8 @@ import {
   IconLineHeight,
   IconLetterCase,
   IconRuler2,
-  IconReportAnalytics,
-  IconDeviceAnalytics,
+  IconMessageReport,
+  IconClipboardList,
   IconX,
 } from "@tabler/icons-react";
 
@@ -60,6 +63,9 @@ function parseReportStats(reportText: string): ReportStats {
 
 export default function Report() {
   const [state, setState] = useState<State>("idle");
+  const [inputMode, setInputMode] = useState<InputMode>("file");
+  const [originalRawText, setOriginalRawText] = useState("");
+  const [attackedRawText, setAttackedRawText] = useState("");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [attackedFile, setAttackedFile] = useState<File | null>(null);
   const [reportFile, setReportFile] = useState<{
@@ -68,12 +74,55 @@ export default function Report() {
     size: number;
   } | null>(null);
   const [reportStats, setReportStats] = useState<ReportStats | null>(null);
+  const [reportContent, setReportContent] = useState<string | null>(null);
   const [timeTaken, setTimeTaken] = useState<number | null>(null);
   const clearOriginalRef = useRef<(() => void) | null>(null);
   const clearAttackedRef = useRef<(() => void) | null>(null);
 
   const handleOriginalFileChange = useCallback((file: File | null) => {
     setOriginalFile(file);
+  }, []);
+
+  const handleModeChange = useCallback(
+    (newMode: InputMode) => {
+      if (state === "processing" || newMode === inputMode) return;
+      setInputMode(newMode);
+      clearOriginalRef.current?.();
+      clearAttackedRef.current?.();
+      setOriginalRawText("");
+      setAttackedRawText("");
+      setOriginalFile(null);
+      setAttackedFile(null);
+      if (state === "done" || state === "error") {
+        if (reportFile) window.URL.revokeObjectURL(reportFile.url);
+        setState("idle");
+        setReportFile(null);
+        setReportStats(null);
+        setReportContent(null);
+        setTimeTaken(null);
+      }
+    },
+    [inputMode, state, reportFile],
+  );
+
+  const handleOriginalTextChange = useCallback((text: string) => {
+    setOriginalRawText(text);
+    if (text.trim().length > 0) {
+      setOriginalFile(new File([text], "original.txt", { type: "text/plain" }));
+    } else {
+      setOriginalFile(null);
+    }
+  }, []);
+
+  const handleAttackedTextChange = useCallback((text: string) => {
+    setAttackedRawText(text);
+    if (text.trim().length > 0) {
+      setAttackedFile(
+        new File([text], "recovered.txt", { type: "text/plain" }),
+      );
+    } else {
+      setAttackedFile(null);
+    }
   }, []);
 
   const handleAttackedFileChange = useCallback((file: File | null) => {
@@ -94,11 +143,14 @@ export default function Report() {
     }
     clearOriginalRef.current?.();
     clearAttackedRef.current?.();
+    setOriginalRawText("");
+    setAttackedRawText("");
     setState("idle");
     setOriginalFile(null);
     setAttackedFile(null);
     setReportFile(null);
     setReportStats(null);
+    setReportContent(null);
     setTimeTaken(null);
   }, [reportFile]);
 
@@ -133,15 +185,15 @@ export default function Report() {
       const url = window.URL.createObjectURL(blob);
 
       const contentDisposition = response.headers["content-disposition"];
-      let filename = `${originalFile.name.replace(/\.[^.]+$/, "")}_comparison_report.txt`;
-      if (contentDisposition) {
-        filename = contentDisposition
-          .split(";")[1]
-          .split("=")[1]
-          .replace(/"/g, "");
-      }
+      const headerFilename = contentDisposition?.match(
+        /filename="?([^";]+)"?/,
+      )?.[1];
+      const filename =
+        headerFilename ||
+        `${originalFile.name.replace(/\.[^.]+$/, "")}_comparison_report.txt`;
 
       const reportText = await blob.text();
+      setReportContent(reportText);
       const stats = parseReportStats(reportText);
       setReportStats(stats);
 
@@ -159,24 +211,54 @@ export default function Report() {
 
   return (
     <>
-      <Header backButton animation titleText="Generate Report" />
-      <main className="flex flex-col justify-center items-center gap-6 md:gap-10 p-4 md:p-6 w-full">
+      <Header backButton animation titleText="COMPARISON REPORT" />
+      <main className="flex flex-col justify-center items-center gap-4 md:gap-5 p-4 md:p-6 w-full">
+        <ModeSelector
+          mode={inputMode}
+          onModeChange={handleModeChange}
+          disabled={state === "processing"}
+          className="max-w-6xl"
+        />
+
         <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-10 w-full">
-            <FileSelector
-              titleText="Add Original File"
-              setFile={handleOriginalFileChange}
-              state={state}
-              className="w-full"
-              onClearFilesReady={handleSetClearOriginal}
-            />
-            <FileSelector
-              titleText="Add Recovered File"
-              setFile={handleAttackedFileChange}
-              state={state}
-              className="w-full"
-              onClearFilesReady={handleSetClearAttacked}
-            />
+            {inputMode === "file" ? (
+              <>
+                <FileSelector
+                  titleText="Add Original File"
+                  label="Original"
+                  setFile={handleOriginalFileChange}
+                  state={state}
+                  className="w-full"
+                  onClearFilesReady={handleSetClearOriginal}
+                />
+                <FileSelector
+                  titleText="Add Recovered File"
+                  label="Recovered"
+                  setFile={handleAttackedFileChange}
+                  state={state}
+                  className="w-full"
+                  onClearFilesReady={handleSetClearAttacked}
+                />
+              </>
+            ) : (
+              <>
+                <DirectTextInput
+                  title="Original"
+                  value={originalRawText}
+                  onChange={handleOriginalTextChange}
+                  placeholder="Type or paste original text..."
+                  disabled={state !== "idle"}
+                />
+                <DirectTextInput
+                  title="Recovered"
+                  value={attackedRawText}
+                  onChange={handleAttackedTextChange}
+                  placeholder="Type or paste recovered text..."
+                  disabled={state !== "idle"}
+                />
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-5 gap-2 w-full mt-2">
@@ -205,7 +287,7 @@ export default function Report() {
                 </>
               ) : (
                 <>
-                  <IconDeviceAnalytics className="size-4" aria-hidden="true" />
+                  <IconClipboardList className="size-4" aria-hidden="true" />
                   GENERATE REPORT
                 </>
               )}
@@ -213,11 +295,7 @@ export default function Report() {
             <Button
               className="col-span-2 w-full leading-none"
               variant="destructive"
-              disabled={
-                state === "processing" ||
-                state === "done" ||
-                (!originalFile && !attackedFile)
-              }
+              disabled={state === "processing"}
               onClick={handleClear}
             >
               <IconReload className="size-4" aria-hidden="true" />
@@ -227,95 +305,148 @@ export default function Report() {
         </div>
 
         {state === "done" && reportStats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
-            <div className="flex flex-col justify-center items-start gap-4 text-sm text-muted-foreground">
-              {reportFile && (
-                <div className="flex items-center gap-1 leading-none">
-                  <IconFileInfo
-                    className="size-4 inline-block"
+          <>
+            {reportContent && (
+              <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+                <ResultPreview
+                  title="COMPARISON REPORT"
+                  content={reportContent}
+                />
+              </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4 md:p-6 max-w-6xl bg-card border rounded-lg">
+              <div className="flex flex-col justify-center items-start gap-4 text-xs w-full">
+                {reportFile && (
+                  <div className="flex items-center gap-1.5 leading-none">
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconFileInfo
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      FILE SIZE:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {formatBytes(reportFile.size)}
+                    </span>
+                  </div>
+                )}
+                {timeTaken !== null && (
+                  <div className="flex items-center gap-1.5 leading-none">
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconClock
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      TIME TAKEN:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {timeTaken.toFixed(2)}s
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconMessageReport
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    VERDICT:
+                  </span>
+                  <span className="font-mono text-muted-foreground font-semibold">
+                    {reportStats.verdict}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconRuler2
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    LENGTH DIFFERENCE:
+                  </span>
+                  <span className="font-mono text-muted-foreground">
+                    {reportStats.lengthDifference}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-center items-start gap-4 text-xs w-full">
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconPercentage
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    OVERALL ACCURACY:
+                  </span>
+                  <span className="font-mono text-muted-foreground">
+                    {reportStats.overallAccuracy}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconLineHeight
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    LINE ACCURACY:
+                  </span>
+                  <span className="font-mono text-muted-foreground">
+                    {reportStats.lineAccuracy}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconAbc className="size-4 shrink-0" aria-hidden="true" />
+                    WORD ACCURACY:
+                  </span>
+                  <span className="font-mono text-muted-foreground">
+                    {reportStats.wordAccuracy}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconLetterCase
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    ALPHABET ACCURACY:
+                  </span>
+                  <span className="font-mono text-muted-foreground">
+                    {reportStats.alphabetAccuracy}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-center items-center gap-6 md:gap-8">
+                <Button
+                  title={reportFile?.filename || "N/A"}
+                  className="w-full leading-none"
+                  variant="outline"
+                  onClick={handleDownload}
+                >
+                  <IconDownload
+                    className="size-4 shrink-0"
                     aria-hidden="true"
                   />
-                  File Size: <b>{formatBytes(reportFile.size)}</b>
-                </div>
-              )}
-              {timeTaken !== null && (
-                <div className="flex items-center gap-1 leading-none">
-                  <IconClock
-                    className="size-4 inline-block"
-                    aria-hidden="true"
-                  />
-                  Time Taken: <b>{timeTaken.toFixed(2)}s</b>
-                </div>
-              )}
-              <div className="flex items-center gap-1 leading-none">
-                <IconReportAnalytics
-                  className="size-4 inline-block"
-                  aria-hidden="true"
-                />
-                Verdict: <b>{reportStats.verdict}</b>
-              </div>
-              <div className="flex items-center gap-1 leading-none">
-                <IconRuler2
-                  className="size-4 inline-block"
-                  aria-hidden="true"
-                />
-                Length Difference: <b>{reportStats.lengthDifference}</b>
+                  <span className="truncate">
+                    {reportFile?.filename
+                      ? truncateFilename(reportFile.filename)
+                      : "N/A"}
+                  </span>
+                </Button>
+
+                <Button
+                  className="text-destructive hover:text-destructive/80 w-full leading-none"
+                  variant="outline"
+                  onClick={handleClear}
+                >
+                  <IconReload className="size-4" aria-hidden="true" />
+                  GENERATE AGAIN
+                </Button>
               </div>
             </div>
-
-            <div className="flex flex-col justify-center items-start gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1 leading-none">
-                <IconPercentage
-                  className="size-4 inline-block"
-                  aria-hidden="true"
-                />
-                Overall Accuracy: <b>{reportStats.overallAccuracy}</b>
-              </div>
-              <div className="flex items-center gap-1 leading-none">
-                <IconLineHeight
-                  className="size-4 inline-block"
-                  aria-hidden="true"
-                />
-                Line Accuracy: <b>{reportStats.lineAccuracy}</b>
-              </div>
-              <div className="flex items-center gap-1 leading-none">
-                <IconAbc className="size-4 inline-block" aria-hidden="true" />
-                Word Accuracy: <b>{reportStats.wordAccuracy}</b>
-              </div>
-              <div className="flex items-center gap-1 leading-none">
-                <IconLetterCase
-                  className="size-4 inline-block"
-                  aria-hidden="true"
-                />
-                Alphabet Accuracy: <b>{reportStats.alphabetAccuracy}</b>
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-center items-center gap-6 md:gap-8">
-              <Button
-                title={reportFile?.filename || "N/A"}
-                className="w-full leading-none"
-                variant="outline"
-                onClick={handleDownload}
-              >
-                <IconDownload className="size-4 shrink-0" aria-hidden="true" />
-                <span className="truncate">
-                  {reportFile?.filename
-                    ? truncateFilename(reportFile.filename)
-                    : "N/A"}
-                </span>
-              </Button>
-
-              <Button
-                className="text-destructive hover:text-destructive/80 w-full leading-none"
-                variant="outline"
-                onClick={handleClear}
-              >
-                <IconReload className="size-4" aria-hidden="true" />
-                ANOTHER REPORT
-              </Button>
-            </div>
-          </div>
+          </>
         )}
 
         {state === "error" && (

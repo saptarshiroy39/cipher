@@ -24,7 +24,7 @@ export default function NotFound() {
         asChild
       >
         <Link href="/">
-          <IconHome className="mr-2 h-5 w-5" />
+          <IconHome className="mr-2 size-5" />
           RETURN HOME
         </Link>
       </Button>

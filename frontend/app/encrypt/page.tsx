@@ -18,7 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
+import ModeSelector, { type InputMode } from "@/components/ModeSelector";
+import DirectTextInput from "@/components/DirectTextInput";
 import FileSelector, { truncateFilename } from "@/components/FileSelector";
+import ResultPreview from "@/components/ResultPreview";
 import {
   IconCheck,
   IconClock,
@@ -62,7 +65,10 @@ export default function Encrypt() {
     rc5R: 12,
     rc5B: 16,
   });
+  const [inputMode, setInputMode] = useState<InputMode>("file");
+  const [rawText, setRawText] = useState("");
   const [downloadFiles, setDownloadFiles] = useState<DownloadFile[]>([]);
+  const [outputText, setOutputText] = useState<string | null>(null);
   const [timeTaken, setTimeTaken] = useState<number | null>(null);
   const [keyCopied, setKeyCopied] = useState(false);
   const [isGeneratingKey, setIsGeneratingKey] = useState(false);
@@ -70,6 +76,36 @@ export default function Encrypt() {
 
   const handleFileChange = useCallback((file: File | null) => {
     setFormState((prev) => ({ ...prev, file }));
+  }, []);
+
+  const handleModeChange = useCallback(
+    (newMode: InputMode) => {
+      if (state === "processing" || newMode === inputMode) return;
+      setInputMode(newMode);
+      if (clearFilesRef.current) clearFilesRef.current();
+      setRawText("");
+      setFormState((prev) => ({ ...prev, file: null }));
+      if (state === "done" || state === "error") {
+        setState("idle");
+        downloadFiles.forEach((f) => window.URL.revokeObjectURL(f.url));
+        setDownloadFiles([]);
+        setOutputText(null);
+        setTimeTaken(null);
+      }
+    },
+    [inputMode, state, downloadFiles],
+  );
+
+  const handleTextChange = useCallback((text: string) => {
+    setRawText(text);
+    if (text.trim().length > 0) {
+      const generatedFile = new File([text], "plaintext.txt", {
+        type: "text/plain",
+      });
+      setFormState((prev) => ({ ...prev, file: generatedFile }));
+    } else {
+      setFormState((prev) => ({ ...prev, file: null }));
+    }
   }, []);
 
   const handleSetClear = useCallback((clearFn: () => void) => {
@@ -81,6 +117,7 @@ export default function Encrypt() {
     if (clearFilesRef.current) {
       clearFilesRef.current();
     }
+    setRawText("");
     setState("idle");
     setFormState({
       file: null,
@@ -92,6 +129,7 @@ export default function Encrypt() {
       rc5B: 16,
     });
     setDownloadFiles([]);
+    setOutputText(null);
     setTimeTaken(null);
   }, [downloadFiles]);
 
@@ -171,7 +209,6 @@ export default function Encrypt() {
         },
       );
 
-
       const files: DownloadFile[] = [];
       const baseName = formState.file?.name.replace(/\.[^.]+$/, "") || "file";
       const suffix = formState.encryptionMethod
@@ -179,6 +216,7 @@ export default function Encrypt() {
         : "";
 
       const encText = response.data.ciphertext || "";
+      setOutputText(encText);
       const encTextBlob = new Blob([encText], { type: "text/plain" });
       files.push({
         url: window.URL.createObjectURL(encTextBlob),
@@ -228,17 +266,35 @@ export default function Encrypt() {
 
   return (
     <>
-      <Header backButton animation titleText="Encrypt" />
-      <main className="flex flex-col justify-center items-center gap-6 md:gap-10 p-4 md:p-6 w-full">
+      <Header backButton animation titleText="ENCRYPT" />
+      <main className="flex flex-col justify-center items-center gap-4 md:gap-5 p-4 md:p-6 w-full">
+        <ModeSelector
+          mode={inputMode}
+          onModeChange={handleModeChange}
+          disabled={state === "processing"}
+          className="max-w-6xl"
+        />
+
         <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-10 w-full">
-            <FileSelector
-              titleText="Add Plaintext File"
-              setFile={handleFileChange}
-              state={state}
-              className="w-full"
-              onClearFilesReady={handleSetClear}
-            />
+            {inputMode === "file" ? (
+              <FileSelector
+                titleText="Add Plaintext File"
+                label="PLAINTEXT"
+                setFile={handleFileChange}
+                state={state}
+                className="w-full"
+                onClearFilesReady={handleSetClear}
+              />
+            ) : (
+              <DirectTextInput
+                title="Plaintext"
+                value={rawText}
+                onChange={handleTextChange}
+                placeholder="Type or paste plaintext to encrypt..."
+                disabled={state !== "idle"}
+              />
+            )}
             <div className="flex flex-col justify-center items-center gap-6 w-full">
               <Field>
                 <FieldLabel htmlFor="input-button-group">
@@ -451,13 +507,7 @@ export default function Encrypt() {
             <Button
               className="col-span-2 w-full leading-none"
               variant="destructive"
-              disabled={
-                state === "processing" ||
-                state === "done" ||
-                (formState.file === null &&
-                  !formState.encryptionMethod &&
-                  !formState.encryptionKey)
-              }
+              disabled={state === "processing"}
               onClick={handleClear}
             >
               <IconReload className="size-4" aria-hidden="true" />
@@ -467,89 +517,112 @@ export default function Encrypt() {
         </div>
 
         {state === "done" && downloadFiles.length > 0 && (
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
-            <div className="flex flex-col justify-center items-start gap-5 text-sm text-muted-foreground w-full">
-              <div className="flex flex-row flex-wrap justify-start items-center gap-1">
-                <span className="flex justify-center items-center gap-1 leading-none">
-                  <IconKey className="size-4 inline-block" aria-hidden="true" />
-                  Encryption Key:
-                </span>
-                <span className="flex justify-center items-center gap-1.5 leading-none">
-                  {formState.encryptionKey}
-                  <Button
-                    size="icon-lg"
-                    variant="ghost"
-                    className="size-4"
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        formState.encryptionKey || "",
-                      );
-                      setKeyCopied(true);
-                      setTimeout(() => setKeyCopied(false), 2000);
-                    }}
-                    aria-label="Copy key to clipboard"
-                  >
-                    {keyCopied ? (
-                      <IconCheck className="size-4" aria-hidden="true" />
-                    ) : (
-                      <IconCopy className="size-4" aria-hidden="true" />
-                    )}
-                  </Button>
-                </span>
+          <>
+            {outputText && (
+              <div className="flex flex-col justify-between items-center gap-6 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+                <ResultPreview
+                  title="ENCRYPTED CIPHERTEXT"
+                  content={outputText}
+                />
               </div>
-
-              {timeTaken !== null && (
-                <div className="flex items-center gap-1 leading-none">
-                  <IconClock
-                    className="size-4 inline-block"
-                    aria-hidden="true"
-                  />
-                  Time Taken: {timeTaken.toFixed(2)} seconds
-                </div>
-              )}
-
-              {downloadFiles.map((dlFile) => (
-                <div
-                  key={dlFile.filename}
-                  className="flex items-center gap-1 leading-none"
-                >
-                  <IconFileInfo
-                    className="size-4 inline-block"
-                    aria-hidden="true"
-                  />
-                  {dlFile.label} File Size: {formatBytes(dlFile.size)}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col justify-center items-center gap-4 w-full">
-              {downloadFiles.map((dlFile) => (
-                <Button
-                  key={dlFile.filename}
-                  title={dlFile.filename}
-                  className="w-full leading-none"
-                  variant="outline"
-                  onClick={() => handleDownload(dlFile)}
-                >
-                  <IconDownload
-                    className="size-4 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="truncate">
-                    {truncateFilename(dlFile.filename)}
+            )}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-10 p-4 md:p-6 w-full max-w-6xl bg-card border rounded-lg">
+              <div className="flex flex-col justify-center items-start gap-4 text-xs w-full">
+                <div className="flex flex-row flex-wrap justify-start items-center gap-1.5">
+                  <span className="flex items-center gap-1.5 leading-none font-semibold tracking-wide uppercase select-none text-foreground">
+                    <IconKey
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    ENCRYPTION KEY:
                   </span>
-                </Button>
-              ))}
+                  <span className="flex items-center gap-1.5 leading-none font-mono text-muted-foreground">
+                    {formState.encryptionKey}
+                    <Button
+                      size="icon-lg"
+                      variant="ghost"
+                      className="size-4"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          formState.encryptionKey || "",
+                        );
+                        setKeyCopied(true);
+                        setTimeout(() => setKeyCopied(false), 2000);
+                      }}
+                      aria-label="Copy key to clipboard"
+                    >
+                      {keyCopied ? (
+                        <IconCheck className="size-4 text-green-500" aria-hidden="true" />
+                      ) : (
+                        <IconCopy className="size-4" aria-hidden="true" />
+                      )}
+                    </Button>
+                  </span>
+                </div>
 
-              <Button
-                className="text-destructive hover:text-destructive/80 w-full leading-none"
-                variant="outline"
-                onClick={handleClear}
-              >
-                <IconReload className="size-4" aria-hidden="true" />
-                ENCRYPT ANOTHER FILE
-              </Button>
+                {timeTaken !== null && (
+                  <div className="flex items-center gap-1.5 leading-none">
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconClock
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      TIME TAKEN:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {timeTaken.toFixed(2)} seconds
+                    </span>
+                  </div>
+                )}
+
+                {downloadFiles.map((dlFile) => (
+                  <div
+                    key={dlFile.filename}
+                    className="flex items-center gap-1.5 leading-none"
+                  >
+                    <span className="flex items-center gap-1.5 font-semibold tracking-wide uppercase select-none text-foreground">
+                      <IconFileInfo
+                        className="size-4 shrink-0"
+                        aria-hidden="true"
+                      />
+                      {dlFile.label.toUpperCase()} FILE SIZE:
+                    </span>
+                    <span className="font-mono text-muted-foreground">
+                      {formatBytes(dlFile.size)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4 w-full">
+                {downloadFiles.map((dlFile) => (
+                  <Button
+                    key={dlFile.filename}
+                    title={dlFile.filename}
+                    className="w-full leading-none"
+                    variant="outline"
+                    onClick={() => handleDownload(dlFile)}
+                  >
+                    <IconDownload
+                      className="size-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="truncate">
+                      {truncateFilename(dlFile.filename)}
+                    </span>
+                  </Button>
+                ))}
+
+                <Button
+                  className="text-destructive hover:text-destructive/80 w-full leading-none"
+                  variant="outline"
+                  onClick={handleClear}
+                >
+                  <IconReload className="size-4" aria-hidden="true" />
+                  ENCRYPT AGAIN
+                </Button>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {state === "error" && (
