@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/saptarshiroy39/cipher">
-    <img alt="Version" src="https://img.shields.io/badge/version-v1.5.0-emerald">
+    <img alt="Version" src="https://img.shields.io/badge/version-v2.0.0-emerald">
   </a>
   <a href="https://github.com/saptarshiroy39/cipher/blob/main/LICENSE">
     <img alt="GitHub License" src="https://img.shields.io/github/license/saptarshiroy39/cipher?color=crimson">

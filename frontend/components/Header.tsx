@@ -45,7 +45,7 @@ export default function Header({
           {animation ? (
             <HyperText as="span">{titleText || "CIPHER"}</HyperText>
           ) : (
-            <span>{titleText || "Cipher"}</span>
+            <span>{titleText || "CIPHER"}</span>
           )}
         </span>
 
@@ -69,10 +69,7 @@ export default function Header({
           </a>
         </div>
 
-        <ThemeToggle
-          className="shrink-0 aspect-square"
-          title="Toggle theme"
-        />
+        <ThemeToggle className="shrink-0 aspect-square" title="Toggle theme" />
       </div>
     </header>
   );

@@ -14,8 +14,10 @@ import {
 import { flushSync } from "react-dom";
 import { cn } from "@/lib/cn";
 
-export interface ThemeToggleProps
-  extends Omit<ComponentPropsWithoutRef<"button">, "children" | "onClick"> {
+export interface ThemeToggleProps extends Omit<
+  ComponentPropsWithoutRef<"button">,
+  "children" | "onClick"
+> {
   iconClassName?: string;
   duration?: number;
 }
@@ -51,7 +53,7 @@ function getHexagonClipPaths(
   cy: number,
   maxRadius: number,
   viewportWidth: number,
-  viewportHeight: number
+  viewportHeight: number,
 ): [string, string] {
   const toX = (x: number) => `${(x / viewportWidth) * 100}%`;
   const toY = (y: number) => `${(y / viewportHeight) * 100}%`;
@@ -68,14 +70,14 @@ function getHexagonClipPaths(
 
 export function useThemeToggle(
   buttonRef?: RefObject<HTMLButtonElement | null>,
-  duration = 400
+  duration = 400,
 ) {
   const { setTheme, resolvedTheme } = useTheme();
   const reduce = useReducedMotion() ?? false;
   const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
-    () => false
+    () => false,
   );
   const isTransitioningRef = useRef(false);
   const activeAnimRef = useRef<Animation | null>(null);
@@ -139,7 +141,7 @@ export function useThemeToggle(
 
     const maxRadius = Math.hypot(
       Math.max(x, viewportWidth - x),
-      Math.max(y, viewportHeight - y)
+      Math.max(y, viewportHeight - y),
     );
 
     const clipPath = getHexagonClipPaths(
@@ -147,14 +149,14 @@ export function useThemeToggle(
       y,
       maxRadius,
       viewportWidth,
-      viewportHeight
+      viewportHeight,
     );
 
     const root = document.documentElement;
     root.dataset.magicuiThemeVt = "active";
     root.style.setProperty(
       "--magicui-theme-toggle-vt-duration",
-      `${duration}ms`
+      `${duration}ms`,
     );
     root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
 
@@ -179,15 +181,12 @@ export function useThemeToggle(
 
     transition?.ready
       ?.then(() => {
-        const anim = document.documentElement.animate(
-          { clipPath },
-          {
-            duration,
-            easing: "ease-in-out",
-            fill: "forwards",
-            pseudoElement: "::view-transition-new(root)",
-          } as KeyframeAnimationOptions
-        );
+        const anim = document.documentElement.animate({ clipPath }, {
+          duration,
+          easing: "ease-in-out",
+          fill: "forwards",
+          pseudoElement: "::view-transition-new(root)",
+        } as KeyframeAnimationOptions);
         activeAnimRef.current = anim;
       })
       .catch(() => {});
@@ -209,11 +208,13 @@ export function ThemeToggle({
     <button
       ref={buttonRef}
       type="button"
-      aria-label={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={
+        mounted && isDark ? "Switch to light mode" : "Switch to dark mode"
+      }
       onClick={toggle}
       className={cn(
         "flex size-8 shrink-0 aspect-square items-center justify-center rounded-full border border-border bg-accent hover:bg-accent/70 p-0 transition-colors cursor-pointer",
-        className
+        className,
       )}
       {...rest}
     >
@@ -232,19 +233,29 @@ export function ThemeToggle({
               {isDark ? (
                 <IconSun
                   size={18}
-                  className={cn("transition-transform duration-200", iconClassName)}
+                  className={cn(
+                    "transition-transform duration-200",
+                    iconClassName,
+                  )}
                 />
               ) : (
                 <IconMoon
                   size={18}
-                  className={cn("transition-transform duration-200", iconClassName)}
+                  className={cn(
+                    "transition-transform duration-200",
+                    iconClassName,
+                  )}
                 />
               )}
             </motion.span>
           </AnimatePresence>
         </span>
       ) : (
-        <IconSun size={18} className={cn("opacity-0", iconClassName)} aria-hidden="true" />
+        <IconSun
+          size={18}
+          className={cn("opacity-0", iconClassName)}
+          aria-hidden="true"
+        />
       )}
     </button>
   );

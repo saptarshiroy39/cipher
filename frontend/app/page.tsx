@@ -13,7 +13,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 
-
 export default function Home() {
   const features = [
     {
@@ -38,7 +37,7 @@ export default function Home() {
         "Analyze ciphertext patterns automatically. Reveal likely letter substitutions.",
     },
     {
-      title: "GENERATE COMPARISON REPORT",
+      title: "COMPARISON REPORT",
       buttonText: "GENERATE",
       href: "/report",
       description:
@@ -59,8 +58,8 @@ export default function Home() {
             {[
               "Caesar",
               "Permutation",
-              "Playfair(8x8)",
-              "Hill(2x2)",
+              "Playfair (8x8)",
+              "Hill (2x2)",
               "Vigenère",
               "RC5",
               "DES",
