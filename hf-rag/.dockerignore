@@ -1,9 +1,0 @@
-.env
-.git
-.gitignore
-__pycache__
-*.pyc
-*.pyo
-*.md
-.venv
-venv
