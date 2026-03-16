@@ -16,12 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync to Hugging Face
-        uses: nateraw/huggingface-sync-action@v0.0.4
-        with:
-          github_repo_id: saptarshiroy39/Cipher
-          huggingface_repo_id: saptarshiroy39/Cipher
-          repo_type: space
-          space_sdk: docker
-          hf_token: ${{ secrets.HF_TOKEN }}
-          github_dir: backend
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "bot@huggingface.co"
+          git config --global user.name "Hugging Face Bot"
+          # Split the backend dir into a new branch
+          git subtree split --prefix backend -b hf-deploy
+          # Force push that branch to the remote main branch
+          git push https://saptarshiroy39:$HF_TOKEN@huggingface.co/spaces/saptarshiroy39/Cipher hf-deploy:main --force
