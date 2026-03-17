@@ -1,3 +1,13 @@
+---
+title: Cipher
+emoji: 🔐
+colorFrom: gray
+colorTo: blue
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # Cipher (Backend)
 
 **FastAPI** backend for the **Cipher** project.
