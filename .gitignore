@@ -1,6 +1,4 @@
-# ========================
 # Frontend (Next.js / Node)
-# ========================
 
 # Dependencies
 node_modules/
@@ -26,9 +24,7 @@ yarn-error.log*
 # Vercel
 .vercel
 
-# ========================
 # Backend (Python / FastAPI)
-# ========================
 
 # Virtual environment
 venv/
@@ -50,9 +46,7 @@ __pycache__/
 .coverage
 coverage/
 
-# ========================
 # Shared / General
-# ========================
 
 # Env files
 .env

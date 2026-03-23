@@ -1,6 +1,6 @@
 ---
 title: Cipher
-emoji: 🔐
+emoji: 🔑
 colorFrom: gray
 colorTo: blue
 sdk: docker

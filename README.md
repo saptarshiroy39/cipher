@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="cipher-logo.png" alt="Cipher Logo" width="64">
+  <img src="./frontend/public/logo.png" alt="Cipher Logo" width="64">
   <br>
   <b>Cipher</b>
 </h1>
@@ -29,7 +29,7 @@
 
 Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI** backend, connected over REST with real-time **SSE streaming** for frequency analysis attacks. All 8 cipher implementations live in modular Python routers, each handling encrypt, decrypt, key generation, and (where applicable) attack logic independently.
 
-![Cipher](Cipher.png)
+![Cipher](./frontend/public/banner.png)
 
 ---
 
