@@ -5,7 +5,7 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/saptarshiroy39/Cipher"><b>Cipher</b></a> is your all-in-one toolkit for classic cryptography. Built with a <a href="https://nextjs.org"><b>Next.js</b></a> frontend and a <a href="https://fastapi.tiangolo.com"><b>FastAPI</b></a> backend, it lets you <b>Encrypt</b>, <b>Decrypt</b>, run <b>Frequency Analysis Attacks</b>, and generate detailed <b>Reports</b> — all from a clean & modern interface.
+  <a href="https://cipher.hirishi.in"><b>Cipher</b></a> is your all-in-one toolkit for classic cryptography. Built with a <a href="https://nextjs.org"><b>Next.js</b></a> frontend and a <a href="https://fastapi.tiangolo.com"><b>FastAPI</b></a> backend, it lets you <b>Encrypt</b>, <b>Decrypt</b>, run <b>Frequency Analysis Attacks</b>, and generate detailed <b>Reports</b> - all from a clean & modern interface.
 </p>
 
 ---
@@ -67,6 +67,15 @@ Cipher/
 
 ---
 
+## 📖 Instructions
+
+For detailed setup and usage instructions, refer to the respective README files:
+
+- 🖥️ [**_Backend Instructions_**](./backend/README.md) - Setting up & running the FastAPI backend
+- 🌐 [**_Frontend Instructions_**](./frontend/README.md) - Setting up & running the Next.js frontend
+
+---
+
 <p align="center">
-  Made with 💙 by <a href="https://github.com/saptarshiroy39">Saptarshi Roy</a> & <a href="https://github.com/itskdhere">Krishnendu Das</a>
+  Made with 🔑 by <a href="https://hirishi.in">Saptarshi Roy</a> & <a href="https://itskdhere.com">Krishnendu Das</a>
 </p>
