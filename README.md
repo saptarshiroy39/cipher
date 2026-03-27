@@ -10,7 +10,7 @@
 
 ---
 
-## 🔑 Supported Ciphers
+## 🔑 _Supported Ciphers_
 
 | CIPHER                    | KEY TYPE               | ENCRYPTION / DECRYPTION | FREQUENCY ANALYSIS ATTACK |
 | ------------------------- | ---------------------- | ----------------------- | ------------------------- |
@@ -25,7 +25,7 @@
 
 ---
 
-## 🎯 System Overview
+## 🎯 _System Overview_
 
 Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI** backend, connected over REST with real-time **SSE streaming** for frequency analysis attacks. All 8 cipher implementations live in modular Python routers, each handling encrypt, decrypt, key generation, and (where applicable) attack logic independently.
 
@@ -33,7 +33,7 @@ Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ _Architecture_
 
 | #   | COMPONENT         | DESCRIPTION                                     | STACK                                                                |
 | --- | ----------------- | ----------------------------------------------- | -------------------------------------------------------------------- |
@@ -45,34 +45,50 @@ Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI
 
 ---
 
-## 📁 Project Structure
+## 📁 _Project Structure_
 
 ```
 Cipher/
-├── frontend/              # Next.js frontend
-│   ├── app/               # Pages: /, encrypt, decrypt, attack, report
-│   ├── components/        # UI components (shadcn) + custom components
-│   ├── lib/               # Utilities (cn.ts)
-│   ├── hooks/             # Custom React hooks
-│   └── public/            # Static assets
-├── backend/               # FastAPI backend
+├── frontend/               # Next.js frontend
+│   ├── app/                # Pages
+│   │   ├── page.tsx        # Home
+│   │   ├── encrypt/        # Encryption page
+│   │   ├── decrypt/        # Decryption page
+│   │   ├── attack/         # Frequency analysis attack page
+│   │   ├── report/         # Report generation page
+│   │   └── layout.tsx      # Root layout
+│   ├── components/         # UI components (shadcn) + custom components
+│   ├── lib/                # Utilities (cn.ts)
+│   ├── hooks/              # Custom React hooks
+│   └── public/             # Static assets
+├── backend/                # FastAPI backend
 │   └── app/
-│       ├── main.py        # FastAPI app entry point
-│       ├── config.py      # App configuration
-│       ├── routes.py      # API route definitions
-│       └── routers/       # Cipher logic (encrypt, decrypt, attack, key, report)
+│       ├── main.py         # FastAPI app entry point
+│       ├── config.py       # App configuration
+│       ├── routes.py       # API route definitions
+│       ├── routers/        # Cipher implementations
+│       │   ├── caesar/     # Caesar cipher (encrypt, decrypt, attack)
+│       │   ├── permute/    # Permutation cipher
+│       │   ├── vigenere/   # Vigenère cipher
+│       │   ├── playfair/   # Playfair cipher (8x8)
+│       │   ├── hill/       # Hill cipher (2x2)
+│       │   ├── des/        # DES
+│       │   ├── aes/        # AES
+│       │   ├── rc5/        # RC5
+│       │   └── report.py   # Report generation
+│       └── static/         # Static files
 ├── README.md
 └── .gitignore
 ```
 
 ---
 
-## 📖 Instructions
+## 📖 _Instructions_
 
 For detailed setup and usage instructions, refer to the respective README files:
 
-- 🖥️ [**_Backend Instructions_**](./backend/README.md) - Setting up & running the FastAPI backend
-- 🌐 [**_Frontend Instructions_**](./frontend/README.md) - Setting up & running the Next.js frontend
+- 🖥️ [**_`Backend Instructions`_**](./backend/README.md) - Setting up & running the FastAPI backend
+- 🌐 [**_`Frontend Instructions`_**](./frontend/README.md) - Setting up & running the Next.js frontend
 
 ---
 

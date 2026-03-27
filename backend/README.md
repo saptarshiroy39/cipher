@@ -8,11 +8,17 @@ pinned: false
 app_port: 7860
 ---
 
-# Cipher (Backend)
+<h1 align="center">
+  <b>🖥️</b>
+  <br>
+  <b>Cipher (Backend)</b>
+</h1>
 
-**FastAPI** backend for the **Cipher** project.
+<p align="center">
+  <b>FastAPI</b> backend for the <b>Cipher</b> project.
+</p>
 
-## ⚙️ API Endpoints
+## ⚙️ _API Endpoints_
 
 | METHOD                                           | ENDPOINT                  | DESCRIPTION                                       |
 | ------------------------------------------------ | ------------------------- | ------------------------------------------------- |
@@ -52,7 +58,7 @@ app_port: 7860
 | ![POST](https://img.shields.io/badge/POST-green) | `/rc5/encrypt`            | Encrypt with RC5                                  |
 | ![POST](https://img.shields.io/badge/POST-green) | `/rc5/decrypt`            | Decrypt with RC5                                  |
 
-## 📁 Structure
+## 📁 _Structure_
 
 ```
 backend/
@@ -75,14 +81,13 @@ backend/
 └── .env.example        # Environment variables template
 ```
 
-## 🚀 Getting Started
+## 🚀 _Getting Started_
 
 ```bash
 cd backend
 ```
 
 ```bash
-cp .env.example .env
 uv venv venv
 ```
 
@@ -94,8 +99,11 @@ source venv/bin/activate    # Linux / macOS
 
 ```bash
 uv pip install -r requirements.txt
+```
+
+```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-API runs at [http://localhost:8000](http://localhost:8000).  
-Interactive docs at [http://localhost:8000/docs](http://localhost:8000/docs).
+- 🚀 [**_`API`_**](http://localhost:8000) - API runs at [`localhost:8000`](http://localhost:8000)
+- 📚 [**_`Swagger UI Docs`_**](http://localhost:8000/docs) - Swagger UI docs at [`localhost:8000/docs`](http://localhost:8000/docs)

@@ -1,37 +1,42 @@
-# Cipher (Frontend)
+<h1 align="center">
+  <b>🌐</b>
+  <br>
+  <b>Cipher (Frontend)</b>
+</h1>
 
-**Next.js** frontend for the **Cipher** project.
+<p align="center">
+  <b>Next.js</b> frontend for the <b>Cipher</b> project.
+</p>
 
-## 📁 Structure
+## 📁 _Structure_
 
 ```
 frontend/
-├── app/               # Pages
-│   ├── page.tsx       # Home
-│   ├── encrypt/       # Encryption page
-│   ├── decrypt/       # Decryption page
-│   ├── attack/        # Frequency analysis attack page
-│   ├── report/        # Report generation page
-│   └── layout.tsx     # Root layout
-├── components/        # React components
-│   ├── ui/            # shadcn/ui components
+├── app/                # Pages
+│   ├── page.tsx        # Home
+│   ├── encrypt/        # Encryption page
+│   ├── decrypt/        # Decryption page
+│   ├── attack/         # Frequency analysis attack page
+│   ├── report/         # Report generation page
+│   └── layout.tsx      # Root layout
+├── components/         # React components
+│   ├── ui/             # shadcn/ui components
 │   ├── Header.tsx
 │   ├── Footer.tsx
 │   └── ...
-├── lib/               # Utilities
-│   └── cn.ts          # Tailwind class merge helper
-├── hooks/             # Custom hooks
-└── public/            # Static assets
+├── lib/                # Utilities
+│   └── cn.ts           # Tailwind class merge helper
+├── hooks/              # Custom hooks
+└── public/             # Static assets
 ```
 
-## 🚀 Getting Started
+## 🚀 _Getting Started_
 
 ```bash
 cd frontend
 ```
 
 ```bash
-cp .env.example .env
 pnpm install
 ```
 
@@ -39,4 +44,4 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+- 🌐 [**_`Frontend App`_**](http://localhost:3000) - Open frontend app at [`localhost:3000`](http://localhost:3000)
