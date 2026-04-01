@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import { Providers } from "@/components/providers";
@@ -94,6 +95,7 @@ export default function RootLayout({
       <body className={`${lexend.variable} font-lexend antialiased `}>
         <Providers>{children}</Providers>
         <Analytics />
+        <SpeedInsights />
         <Figlet />
       </body>
     </html>
