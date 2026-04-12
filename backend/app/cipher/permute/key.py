@@ -1,4 +1,4 @@
-import random
+import secrets
 
 
 ALPHA = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -6,5 +6,5 @@ ALPHA = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 def generate_key() -> str:
     shuffled = ALPHA.copy()
-    random.shuffle(shuffled)
+    secrets.SystemRandom().shuffle(shuffled)
     return "".join(shuffled)

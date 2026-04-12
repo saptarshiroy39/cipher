@@ -1,5 +1,5 @@
-import random
+import secrets
 
 
 def generate_key() -> int:
-    return random.randint(1, 26)
+    return secrets.randbelow(26) + 1

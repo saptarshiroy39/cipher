@@ -43,17 +43,18 @@ export function HyperText({
   characterSet = DEFAULT_CHARACTER_SET,
   ...props
 }: HyperTextProps) {
-  const MotionComponent =
+  const MotionComponent = (
     typeof Component === "string" && Component in motion
       ? motion[Component as keyof typeof motion]
-      : motion.div;
+      : motion.div
+  ) as typeof motion.div;
 
   const [displayText, setDisplayText] = useState<string[]>(() =>
     children.split(""),
   );
   const [isAnimating, setIsAnimating] = useState(false);
   const iterationCount = useRef(0);
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
 
   const handleAnimationTrigger = () => {
     if (animateOnHover && !isAnimating) {

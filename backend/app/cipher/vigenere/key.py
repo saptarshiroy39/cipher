@@ -1,7 +1,7 @@
-import random
+import secrets
 import string
 
 
 def generate_key() -> str:
-    length = random.randint(3, 6)
-    return "".join(random.choices(string.ascii_uppercase, k=length))
+    length = secrets.randbelow(4) + 3
+    return "".join(secrets.choice(string.ascii_uppercase) for _ in range(length))
