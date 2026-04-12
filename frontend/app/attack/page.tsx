@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import Header from "@/components/Header";
+import { API_URL } from "@/lib/config";
 import {
   Select,
   SelectContent,
@@ -95,8 +96,7 @@ export default function Attack() {
     const startTime = performance.now();
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/${cipherMethod}/attack/stream`, {
+      const response = await fetch(`${API_URL}/${cipherMethod}/attack/stream`, {
         method: "POST",
         body: formData,
       });

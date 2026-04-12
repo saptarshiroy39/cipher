@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import Header from "@/components/Header";
+import { API_URL } from "@/lib/config";
 import {
   Select,
   SelectContent,
@@ -125,9 +126,8 @@ export default function Decrypt() {
     const startTime = performance.now();
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await axios.post(
-        `${apiUrl}/${formState.decryptionMethod}/decrypt`,
+        `${API_URL}/${formState.decryptionMethod}/decrypt`,
         formData,
         {
           headers: {

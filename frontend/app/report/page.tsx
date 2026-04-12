@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import Header from "@/components/Header";
+import { API_URL } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
@@ -131,8 +132,7 @@ export default function Report() {
     const startTime = performance.now();
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await axios.post(`${apiUrl}/report`, formData, {
+      const response = await axios.post(`${API_URL}/report`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         responseType: "blob",
       });

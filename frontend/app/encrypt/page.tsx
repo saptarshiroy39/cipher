@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import Header from "@/components/Header";
+import { API_URL } from "@/lib/config";
 import {
   Select,
   SelectContent,
@@ -114,12 +115,11 @@ export default function Encrypt() {
 
     setIsGeneratingKey(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      let endpoint = `${apiUrl}/${formState.encryptionMethod}/key`;
+      let endpoint = `${API_URL}/${formState.encryptionMethod}/key`;
       if (formState.encryptionMethod === "aes") {
-        endpoint = `${apiUrl}/aes/key?bits=${formState.aesSize}`;
+        endpoint = `${API_URL}/aes/key?bits=${formState.aesSize}`;
       } else if (formState.encryptionMethod === "rc5") {
-        endpoint = `${apiUrl}/rc5/key?b=${formState.rc5B}`;
+        endpoint = `${API_URL}/rc5/key?b=${formState.rc5B}`;
       }
 
       const response = await axios.get(endpoint);
@@ -169,9 +169,8 @@ export default function Encrypt() {
     const startTime = performance.now();
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await axios.post(
-        `${apiUrl}/${formState.encryptionMethod}/encrypt`,
+        `${API_URL}/${formState.encryptionMethod}/encrypt`,
         formData,
         {
           headers: {
