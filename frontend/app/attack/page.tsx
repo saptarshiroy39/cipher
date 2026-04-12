@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import Header from "@/components/Header";
 import {

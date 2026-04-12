@@ -43,9 +43,10 @@ export function HyperText({
   characterSet = DEFAULT_CHARACTER_SET,
   ...props
 }: HyperTextProps) {
-  const MotionComponent = motion.create(Component, {
-    forwardMotionProps: true,
-  });
+  const MotionComponent =
+    typeof Component === "string" && Component in motion
+      ? motion[Component as keyof typeof motion]
+      : motion.div;
 
   const [displayText, setDisplayText] = useState<string[]>(() =>
     children.split(""),
