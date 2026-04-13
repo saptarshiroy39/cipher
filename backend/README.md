@@ -22,8 +22,7 @@ app_port: 7860
 
 | METHOD                                           | ENDPOINT                  | DESCRIPTION                                       |
 | ------------------------------------------------ | ------------------------- | ------------------------------------------------- |
-| ![GET](https://img.shields.io/badge/GET-blue)    | `/`                       | Root endpoint                                     |
-| ![GET](https://img.shields.io/badge/GET-blue)    | `/health`                 | Health check                                      |
+| ![GET](https://img.shields.io/badge/GET-blue)    | `/`                       | API name, version & status                        |
 | ![POST](https://img.shields.io/badge/POST-green) | `/report`                 | Compare original vs recovered and download report |
 | ![GET](https://img.shields.io/badge/GET-blue)    | `/caesar/key`             | Generate a random Caesar cipher key               |
 | ![POST](https://img.shields.io/badge/POST-green) | `/caesar/encrypt`         | Encrypt with Caesar cipher                        |
@@ -65,8 +64,18 @@ backend/
 ├── app/
 │   ├── main.py         # FastAPI app entry point
 │   ├── config.py       # App configuration (env vars)
-│   ├── routes.py       # API route definitions
-│   ├── routers/        # Cipher implementations
+│   ├── routes/         # API route definitions (one file per cipher)
+│   │   ├── _helpers.py # Shared utilities (file I/O, SSE streaming)
+│   │   ├── caesar.py   # Caesar cipher routes
+│   │   ├── permute.py  # Permutation cipher routes
+│   │   ├── vigenere.py # Vigenère cipher routes
+│   │   ├── playfair.py # Playfair cipher routes
+│   │   ├── hill.py     # Hill cipher routes
+│   │   ├── des.py      # DES routes
+│   │   ├── aes.py      # AES routes
+│   │   ├── rc5.py      # RC5 routes
+│   │   └── report.py   # Report & favicon routes
+│   ├── cipher/         # Cipher implementations
 │   │   ├── caesar/     # Caesar cipher (encrypt, decrypt, attack)
 │   │   ├── permute/    # Permutation cipher
 │   │   ├── vigenere/   # Vigenère cipher
@@ -75,7 +84,7 @@ backend/
 │   │   ├── des/        # DES
 │   │   ├── aes/        # AES
 │   │   ├── rc5/        # RC5
-│   │   └── report.py   # Report generation
+│   │   └── report.py   # Report generation logic
 │   └── static/         # Static files
 ├── requirements.txt    # Python dependencies
 └── .env.example        # Environment variables template

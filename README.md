@@ -27,7 +27,7 @@
 
 ## 🎯 _System Overview_
 
-Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI** backend, connected over REST with real-time **SSE streaming** for frequency analysis attacks. All 8 cipher implementations live in modular Python routers, each handling encrypt, decrypt, key generation, and (where applicable) attack logic independently.
+Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI** backend, connected over REST with real-time **SSE streaming** for frequency analysis attacks. All 8 cipher implementations live in the modular `cipher/` Python package, each handling encrypt, decrypt, key generation, and (where applicable) attack logic independently.
 
 ![Cipher](./frontend/public/banner.png)
 
@@ -65,8 +65,8 @@ Cipher/
 │   └── app/
 │       ├── main.py         # FastAPI app entry point
 │       ├── config.py       # App configuration
-│       ├── routes.py       # API route definitions
-│       ├── routers/        # Cipher implementations
+│       ├── routes/         # API route definitions (one file per cipher)
+│       ├── cipher/         # Cipher implementations
 │       │   ├── caesar/     # Caesar cipher (encrypt, decrypt, attack)
 │       │   ├── permute/    # Permutation cipher
 │       │   ├── vigenere/   # Vigenère cipher
