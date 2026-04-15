@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
@@ -14,15 +13,9 @@ from app.routes.aes import router as aes_router
 from app.routes.rc5 import router as rc5_router
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-
-
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    lifespan=lifespan,
     docs_url=None if settings.ENV == "production" else "/docs",
     redoc_url=None if settings.ENV == "production" else "/redoc",
     openapi_url=None if settings.ENV == "production" else "/openapi.json",
