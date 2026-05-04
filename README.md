@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./frontend/public/logo.png" alt="Cipher Logo" width="64">
+  <img src="./frontend/public/logo.png" alt="🔑" width="64">
   <br>
   <b>Cipher</b>
 </h1>
