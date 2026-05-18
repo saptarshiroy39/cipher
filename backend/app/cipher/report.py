@@ -1,6 +1,5 @@
 from collections import Counter
 
-
 ROWS = [
     ["A", "F", "K", "P", "U", "1", "6"],
     ["B", "G", "L", "Q", "V", "2", "7"],

@@ -4,7 +4,6 @@ import threading
 import queue
 from fastapi import UploadFile
 
-
 async def read_file(file: UploadFile) -> str:
     raw = await file.read()
     try:
@@ -12,11 +11,9 @@ async def read_file(file: UploadFile) -> str:
     except UnicodeDecodeError:
         return raw.decode("cp1252", errors="replace")
 
-
 def get_name(file: UploadFile) -> str:
     name = file.filename or "file"
     return name.rsplit(".", 1)[0] if "." in name else name
-
 
 def _run_attack_with_progress(attack_fn, content, progress_queue, **kwargs):
     def progress_callback(current, total, status):
@@ -29,7 +26,6 @@ def _run_attack_with_progress(attack_fn, content, progress_queue, **kwargs):
     except Exception as e:
         progress_queue.put({"progress": -1, "status": "Error", "error": str(e)})
     progress_queue.put(None)
-
 
 async def _sse_generator(progress_queue):
     while True:

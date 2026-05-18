@@ -1,18 +1,11 @@
-import os
 from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import PlainTextResponse
 
 from app.cipher.report import compare
 from app.routes._helpers import read_file, get_name
 
 
 router = APIRouter()
-
-
-@router.get("/favicon.ico", include_in_schema=False)
-async def favicon():
-    path = os.path.join(os.path.dirname(__file__), "..", "static", "favicon.ico")
-    return FileResponse(path)
 
 
 @router.post("/report")

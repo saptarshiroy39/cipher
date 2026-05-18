@@ -2,7 +2,6 @@ import re
 import random
 from collections import Counter
 
-
 ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 EF = {
@@ -46,7 +45,6 @@ for wl in CW.values():
             p += m[c]
         PDB.setdefault(p, []).append(w)
 
-
 def precompute(ct):
     alpha_upper = [c.upper() for c in ct if c.isascii() and c.isalpha()]
     total = len(alpha_upper)
@@ -56,7 +54,6 @@ def precompute(ct):
     cipher_words = [w.upper() for w in re.findall(r"[A-Za-z]+", ct)]
     word_counts = Counter(cipher_words)
     return total, unigrams, bigrams, trigrams, word_counts
-
 
 def score(km, total, unigrams, bigrams, trigrams, word_counts):
     if not total:
@@ -85,7 +82,6 @@ def score(km, total, unigrams, bigrams, trigrams, word_counts):
 
     return s
 
-
 def apply_key(ct, km):
     return "".join(
         km.get(c.upper(), "?") if c.isascii() and c.isupper()
@@ -93,7 +89,6 @@ def apply_key(ct, km):
         else c
         for c in ct
     )
-
 
 def init_key(ct):
     cleaned = re.sub(r"[^A-Z]", "", ct.upper())
@@ -109,7 +104,6 @@ def init_key(ct):
             j += 1
     return km
 
-
 def pat(w):
     m = {}
     p = []
@@ -120,7 +114,6 @@ def pat(w):
             i += 1
         p.append(m[c])
     return "".join(p)
-
 
 def hint_seed(ct, km):
     km = km.copy()
@@ -144,7 +137,6 @@ def hint_seed(ct, km):
                         km[h] = km[cc]
                     km[cc] = pc
     return km
-
 
 def _build_letter_index(unigrams, bigrams, trigrams, word_counts):
     bg_idx = {c: [] for c in ALPHA}
@@ -173,28 +165,23 @@ def _build_letter_index(unigrams, bigrams, trigrams, word_counts):
 
     return bg_idx, tg_idx, wd_idx
 
-
 def _contrib_uni(km, letter, unigrams, total):
     plain = km.get(letter, "?")
     observed = unigrams.get(letter, 0)
     expected = EF.get(plain, 0.01) / 100 * total
     return -((observed - expected) ** 2 / expected)
 
-
 def _contrib_bg(km, bg):
     p = km.get(bg[0], "?") + km.get(bg[1], "?")
     return p in BG
-
 
 def _contrib_tg(km, tg):
     p = km.get(tg[0], "?") + km.get(tg[1], "?") + km.get(tg[2], "?")
     return p in TG
 
-
 def _contrib_wd(km, cw, wlen):
     w = "".join(km.get(c, "?") for c in cw)
     return w in CW_SETS[wlen]
-
 
 def hill_climb(ct, km, precomputed_data, iters=10000, restarts=8, progress_callback=None):
     import time
@@ -308,7 +295,6 @@ def hill_climb(ct, km, precomputed_data, iters=10000, restarts=8, progress_callb
             best = cur.copy()
 
     return best, bs
-
 
 def frequency_attack(ct: str, restarts: int = 10, progress_callback=None) -> dict:
     if progress_callback:

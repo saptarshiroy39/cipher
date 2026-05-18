@@ -10,14 +10,11 @@ from app.cipher.vigenere.decrypt import decrypt as vigenere_decrypt
 from app.cipher.vigenere.attack import vigenere_attack
 from app.routes._helpers import read_file, _run_attack_with_progress, _sse_generator
 
-
 router = APIRouter(prefix="/vigenere", tags=["vigenere"])
-
 
 @router.get("/key")
 async def vigenere_key_route():
     return {"key": vigenere_generate_key()}
-
 
 @router.post("/encrypt")
 async def vigenere_encrypt_route(file: UploadFile = File(...), key: str = Form(...)):
@@ -25,13 +22,11 @@ async def vigenere_encrypt_route(file: UploadFile = File(...), key: str = Form(.
     encrypted = vigenere_encrypt(content, key)
     return JSONResponse(content=encrypted)
 
-
 @router.post("/decrypt")
 async def vigenere_decrypt_route(file: UploadFile = File(...), key: str = Form(...)):
     content = await read_file(file)
     decrypted = vigenere_decrypt(content, key)
     return JSONResponse(content=decrypted)
-
 
 @router.post("/attack")
 async def vigenere_attack_route(file: UploadFile = File(...)):
@@ -40,7 +35,6 @@ async def vigenere_attack_route(file: UploadFile = File(...)):
         None, vigenere_attack, content
     )
     return JSONResponse(content=result)
-
 
 @router.post("/attack/stream")
 async def vigenere_attack_stream(file: UploadFile = File(...)):

@@ -1,19 +1,17 @@
-from pydantic_settings import BaseSettings
+import os
+import json
+from dotenv import load_dotenv
 
+load_dotenv()
 
-class Settings(BaseSettings):
-    APP_NAME: str = "Cipher API"
-    APP_VERSION: str = "1.0.0"
-    DEBUG: bool = False
+APP_NAME = "Cipher API"
+APP_VERSION = "1.0.0"
+DEBUG = False
 
-    HOST: str = "0.0.0.0"
-    PORT: int = 8000
+HOST = "0.0.0.0"
+PORT = 8000
 
-    CORS_ORIGINS: list[str] = ["*"]
+CORS_ORIGINS_STR = os.getenv("CORS_ORIGINS", '["*"]')
+CORS_ORIGINS = json.loads(CORS_ORIGINS_STR)
 
-    ENV: str = "development"
-
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
-
-
-settings = Settings()
+ENV = os.getenv("ENV", "development")

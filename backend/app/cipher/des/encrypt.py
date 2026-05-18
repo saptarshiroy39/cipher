@@ -3,7 +3,6 @@ from Crypto.Util.Padding import pad
 import binascii
 import base64
 
-
 def encrypt(plaintext: str, hex_key: str) -> str:
     key_bytes = binascii.unhexlify(hex_key)
     if len(key_bytes) != 8:

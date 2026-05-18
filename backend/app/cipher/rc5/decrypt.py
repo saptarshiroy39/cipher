@@ -2,7 +2,6 @@ import binascii
 import base64
 import struct
 
-
 class RC5:
     def __init__(self, key_bytes, w=32, r=12):
         self.w = w
@@ -92,11 +91,9 @@ class RC5:
             pack(fmt, out, offset, A, B)
         return bytes(out)
 
-
 def unpad(data):
     padding_len = data[-1]
     return data[:-padding_len]
-
 
 def decrypt(b64_ciphertext: str, hex_key: str, w: int = 32, r: int = 12) -> dict:
     if w not in (16, 32, 64):

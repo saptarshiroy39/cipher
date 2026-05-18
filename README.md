@@ -56,6 +56,7 @@ Cipher/
 │   │   ├── decrypt/        # Decryption page
 │   │   ├── attack/         # Frequency analysis attack page
 │   │   ├── report/         # Report generation page
+│   │   ├── not-found.tsx   # Not found page
 │   │   └── layout.tsx      # Root layout
 │   ├── components/         # UI components (shadcn) + custom components
 │   ├── lib/                # Utilities (cn.ts)

@@ -6,7 +6,6 @@ def get_inverse_matrix(matrix: list[list[int]]) -> list[list[int]]:
         [(-matrix[1][0] * det_inv) % 26, (matrix[0][0] * det_inv) % 26],
     ]
 
-
 def decrypt(ciphertext: str, key: dict) -> str:
     matrix = key["matrix"]
     inv_matrix = get_inverse_matrix(matrix)

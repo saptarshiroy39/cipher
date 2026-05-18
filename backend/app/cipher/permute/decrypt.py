@@ -1,6 +1,5 @@
 PLAIN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-
 def decrypt(ciphertext: str, key: str) -> str:
     key = key.upper()
     dec = {key[i]: PLAIN[i] for i in range(26)}

@@ -4,7 +4,6 @@ def multiply_matrix_vector(matrix: list[list[int]], vector: list[int]) -> list[i
         (matrix[1][0] * vector[0] + matrix[1][1] * vector[1]) % 26,
     ]
 
-
 def encrypt(plaintext: str, key: dict) -> str:
     matrix = key["matrix"]
 

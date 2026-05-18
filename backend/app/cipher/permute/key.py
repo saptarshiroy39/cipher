@@ -1,8 +1,6 @@
 import secrets
 
-
 ALPHA = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
 
 def generate_key() -> str:
     shuffled = ALPHA.copy()

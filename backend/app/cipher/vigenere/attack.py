@@ -1,6 +1,5 @@
 from collections import Counter
 
-
 ENGLISH_FREQ = [
     0.08167, 0.01492, 0.02782, 0.04253, 0.12702,
     0.02228, 0.02015, 0.06094, 0.06966, 0.00153,
@@ -15,7 +14,6 @@ COMMON_BIGRAMS = [
     "TI", "ES", "OR", "TE", "OF", "ED", "IS", "IT", "AL", "AR",
     "ST", "TO", "NT", "NG", "SE", "HA", "AS", "OU", "IO", "LE",
 ]
-
 
 def get_top_key_lengths(cipher_alpha: str, max_key_len: int = 20, top_n: int = 3) -> list[int]:
     ic_scores = {}
@@ -32,7 +30,6 @@ def get_top_key_lengths(cipher_alpha: str, max_key_len: int = 20, top_n: int = 3
         avg_ic = ic_total / key_len
         ic_scores[key_len] = avg_ic
     return sorted(ic_scores, key=ic_scores.get, reverse=True)[:top_n]
-
 
 def frequency_attack_chi_square(cipher_alpha: str, key_len: int) -> str:
     key = []
@@ -58,11 +55,9 @@ def frequency_attack_chi_square(cipher_alpha: str, key_len: int) -> str:
         key.append(chr(best_shift + 65))
     return "".join(key)
 
-
 def score_plaintext(text: str) -> int:
     text = text.upper()
     return sum(text.count(bg) for bg in COMMON_BIGRAMS)
-
 
 def decrypt(cipher: str, key: str) -> str:
     result = []
@@ -81,7 +76,6 @@ def decrypt(cipher: str, key: str) -> str:
             result.append(ch)
     return "".join(result)
 
-
 def reduce_key(key: str) -> str:
     for length in range(1, len(key) + 1):
         if len(key) % length == 0:
@@ -89,7 +83,6 @@ def reduce_key(key: str) -> str:
             if pattern * (len(key) // length) == key:
                 return pattern
     return key
-
 
 def vigenere_attack(ciphertext: str, progress_callback=None) -> dict:
     import time

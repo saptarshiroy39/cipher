@@ -1,6 +1,5 @@
 import string
 
-
 CHARS = string.ascii_uppercase + string.digits + "@#%&*()_+-={}[]:;\"'<>,.?! \n\t"
 
 def generate_key_data(key: str) -> tuple[list[list[str]], dict[str, tuple[int, int]]]:

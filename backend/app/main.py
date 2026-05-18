@@ -1,6 +1,9 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from app.config import APP_NAME, APP_VERSION, CORS_ORIGINS, ENV
 
 from app.routes.report import router as report_router
 from app.routes.caesar import router as caesar_router
@@ -12,18 +15,17 @@ from app.routes.des import router as des_router
 from app.routes.aes import router as aes_router
 from app.routes.rc5 import router as rc5_router
 
-
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    docs_url=None if settings.ENV == "production" else "/docs",
-    redoc_url=None if settings.ENV == "production" else "/redoc",
-    openapi_url=None if settings.ENV == "production" else "/openapi.json",
+    title=APP_NAME,
+    version=APP_VERSION,
+    docs_url=None if ENV == "production" else "/docs",
+    redoc_url=None if ENV == "production" else "/redoc",
+    openapi_url=None if ENV == "production" else "/openapi.json",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,7 +42,12 @@ app.include_router(des_router)
 app.include_router(aes_router)
 app.include_router(rc5_router)
 
-
 @app.get("/")
 async def root():
-    return {"name": settings.APP_NAME, "version": settings.APP_VERSION, "status": "ok"}
+    return {"name": APP_NAME, "version": APP_VERSION, "status": "ok"}
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse(os.path.join("app", "static", "favicon.ico"))

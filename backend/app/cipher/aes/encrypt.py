@@ -4,7 +4,6 @@ import binascii
 import base64
 import os
 
-
 def encrypt(plaintext: str, hex_key: str) -> dict:
     key_bytes = binascii.unhexlify(hex_key)
     byte_len = len(key_bytes)

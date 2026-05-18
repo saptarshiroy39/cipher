@@ -2,7 +2,6 @@ import math
 import itertools
 from collections import Counter
 
-
 ENGLISH_FREQ = {
     "A": 8.167, "B": 1.492, "C": 2.782, "D": 4.253, "E": 12.702,
     "F": 2.228, "G": 2.015, "H": 6.094, "I": 6.966, "J": 0.153,
@@ -23,7 +22,6 @@ COMMON_TRIGRAMS = {
     "ENT", "ION", "TER", "WAS", "YOU", "ITH", "VER", "ALL", "WIT",
 }
 
-
 def chi_squared(text: str) -> float:
     n = len(text)
     if n == 0:
@@ -33,7 +31,6 @@ def chi_squared(text: str) -> float:
         ((count.get(c, 0) - (ENGLISH_FREQ[c] / 100 * n)) ** 2) / (ENGLISH_FREQ[c] / 100 * n)
         for c in ENGLISH_FREQ
     )
-
 
 def score_text(text: str) -> float:
     if not text:
@@ -51,7 +48,6 @@ def score_text(text: str) -> float:
             s += 5
 
     return s
-
 
 def hill_attack(ciphertext: str, progress_callback=None) -> dict:
     import time

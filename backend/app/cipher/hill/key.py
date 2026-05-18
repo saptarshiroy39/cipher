@@ -1,7 +1,6 @@
 import secrets
 import math
 
-
 def generate_key() -> dict:
     while True:
         matrix = [[secrets.randbelow(26) for _ in range(2)] for _ in range(2)]
