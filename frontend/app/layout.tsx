@@ -1,10 +1,13 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
-import { Lexend } from "next/font/google";
+import { Lexend, Oxanium } from "next/font/google";
 import { Providers } from "@/components/providers";
 import Figlet from "@/components/Figlet";
 import "./globals.css";
+import { cn } from "@/lib/cn";
+
+const oxanium = Oxanium({ subsets: ["latin"], variable: "--font-sans" });
 
 const lexend = Lexend({
   variable: "--font-lexend",
@@ -91,8 +94,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${lexend.variable} font-lexend antialiased `}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(oxanium.variable, lexend.variable)}
+    >
+      <body className="font-sans antialiased">
         <Providers>{children}</Providers>
         <Analytics />
         <SpeedInsights />

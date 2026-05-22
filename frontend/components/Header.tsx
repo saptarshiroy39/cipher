@@ -32,7 +32,7 @@ export default function Header({
   return (
     <header className="flex justify-center items-center px-4 sm:px-6 py-4 w-full">
       <div className="flex justify-between items-center w-full max-w-6xl">
-        <h1 className="flex justify-center items-center gap-2 text-2xl font-bold leading-none">
+        <h1 className="flex justify-center items-center gap-2 text-2xl font-bold leading-none font-lexend">
           {backButton ? (
             <Button
               size="icon"

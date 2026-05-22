@@ -19,7 +19,7 @@ export default function NotFound() {
       <Header />
       <main
         id="main"
-        className="flex flex-col items-center justify-center gap-4 min-h-[calc(100vh-9rem)] font-lexend"
+        className="flex flex-col items-center justify-center gap-4 min-h-[calc(100vh-9rem)]"
       >
         <h1 className="text-6xl font-bold">404</h1>
         <h2 className="text-5xl">Not Found</h2>
