@@ -14,6 +14,13 @@ import {
 
 export type State = "idle" | "processing" | "done" | "error";
 
+function truncateFilename(name: string): string {
+  if (name.length <= 50) return name;
+  const dotIndex = name.lastIndexOf(".");
+  const ext = dotIndex !== -1 ? name.slice(dotIndex) : "";
+  return name.slice(0, 50) + "..." + ext;
+}
+
 export default function FileSelector({
   className,
   titleText,
@@ -138,7 +145,7 @@ export default function FileSelector({
                 }
               >
                 {files[0]?.file instanceof File
-                  ? files[0].file.name
+                  ? truncateFilename(files[0].file.name)
                   : "No file selected"}
               </p>
               <div className="flex flex-wrap justify-start gap-1 text-xs text-muted-foreground">
