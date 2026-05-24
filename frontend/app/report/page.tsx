@@ -7,7 +7,7 @@ import { API_URL } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
-import FileSelector from "@/components/FileSelector";
+import FileSelector, { truncateFilename } from "@/components/FileSelector";
 import {
   IconCheck,
   IconClock,
@@ -308,7 +308,7 @@ export default function Report() {
               >
                 <IconDownload className="size-4 shrink-0" aria-hidden="true" />
                 <span className="truncate">
-                  {reportFile?.filename || "N/A"}
+                  {reportFile?.filename ? truncateFilename(reportFile.filename) : "N/A"}
                 </span>
               </Button>
 
