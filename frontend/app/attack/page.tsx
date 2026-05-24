@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { formatBytes } from "@/hooks/use-file-upload";
 import type { State } from "@/components/FileSelector";
-import FileSelector from "@/components/FileSelector";
+import FileSelector, { truncateFilename } from "@/components/FileSelector";
 import {
   IconCheck,
   IconClock,
@@ -376,7 +376,7 @@ export default function Attack() {
                     className="size-4 shrink-0"
                     aria-hidden="true"
                   />
-                  <span className="truncate">{dlFile.filename}</span>
+                  <span className="truncate">{truncateFilename(dlFile.filename)}</span>
                 </Button>
               ))}
 

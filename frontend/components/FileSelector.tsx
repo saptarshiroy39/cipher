@@ -14,7 +14,7 @@ import {
 
 export type State = "idle" | "processing" | "done" | "error";
 
-function truncateFilename(name: string): string {
+export function truncateFilename(name: string): string {
   if (name.length <= 50) return name;
   const dotIndex = name.lastIndexOf(".");
   const ext = dotIndex !== -1 ? name.slice(dotIndex) : "";
