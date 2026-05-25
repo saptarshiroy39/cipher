@@ -18,7 +18,8 @@ export function truncateFilename(name: string): string {
   if (name.length <= 50) return name;
   const dotIndex = name.lastIndexOf(".");
   const ext = dotIndex !== -1 ? name.slice(dotIndex) : "";
-  return name.slice(0, 50) + "..." + ext;
+  const baseName = dotIndex !== -1 ? name.slice(0, dotIndex) : name;
+  return baseName.slice(0, 35) + "..." + baseName.slice(-12) + ext;
 }
 
 export default function FileSelector({
