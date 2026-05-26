@@ -43,8 +43,9 @@ app.include_router(aes_router)
 app.include_router(rc5_router)
 
 @app.get("/")
+@app.head("/") # UptimeRobot
 async def root():
-    return {"name": APP_NAME, "version": APP_VERSION, "status": "ok"}
+    return {"name": APP_NAME, "version": APP_VERSION, "status": "OK"}
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
