@@ -2,7 +2,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import { Lexend, Oxanium } from "next/font/google";
-import { Providers } from "@/components/providers";
+import { ThemeProvider } from "@/components/theme-provider";
 import Figlet from "@/components/Figlet";
 import "./globals.css";
 import { cn } from "@/lib/cn";
@@ -100,7 +100,15 @@ export default function RootLayout({
       className={cn(oxanium.variable, lexend.variable)}
     >
       <body className="font-sans antialiased">
-        <Providers>{children}</Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          enableColorScheme
+        >
+          {children}
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
         <Figlet />

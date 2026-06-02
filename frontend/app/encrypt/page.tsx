@@ -542,7 +542,9 @@ export default function Encrypt() {
                     className="size-4 shrink-0"
                     aria-hidden="true"
                   />
-                  <span className="truncate">{truncateFilename(dlFile.filename)}</span>
+                  <span className="truncate">
+                    {truncateFilename(dlFile.filename)}
+                  </span>
                 </Button>
               ))}
 

@@ -308,7 +308,9 @@ export default function Report() {
               >
                 <IconDownload className="size-4 shrink-0" aria-hidden="true" />
                 <span className="truncate">
-                  {reportFile?.filename ? truncateFilename(reportFile.filename) : "N/A"}
+                  {reportFile?.filename
+                    ? truncateFilename(reportFile.filename)
+                    : "N/A"}
                 </span>
               </Button>
 

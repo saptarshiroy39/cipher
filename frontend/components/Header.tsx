@@ -52,7 +52,10 @@ export default function Header({
             <span>{titleText || "Cipher"}</span>
           )}
         </h1>
-        <AnimatedThemeToggler className="p-1 border rounded-full bg-accent hover:bg-accent/70" />
+        <AnimatedThemeToggler
+          variant="hexagon"
+          className="p-1 border rounded-full bg-accent hover:bg-accent/70"
+        />
       </div>
     </header>
   );
