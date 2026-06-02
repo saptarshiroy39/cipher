@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { HyperText } from "@/components/ui/hyper-text";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { IconArrowLeft } from "@tabler/icons-react";
@@ -34,15 +33,13 @@ export default function Header({
       <div className="flex justify-between items-center w-full max-w-6xl">
         <h1 className="flex justify-center items-center gap-2 text-2xl font-bold leading-none font-lexend">
           {backButton ? (
-            <Button
-              size="icon"
-              variant="secondary"
-              className="rounded-full p-px"
+            <button
+              className="p-1 border rounded-full bg-accent hover:bg-accent/70 flex items-center justify-center border-border cursor-pointer transition-colors"
               onClick={handleBackClick}
               aria-label="Go back"
             >
-              <IconArrowLeft className="size-5" aria-hidden="true" />
-            </Button>
+              <IconArrowLeft aria-hidden="true" />
+            </button>
           ) : (
             <Image src="/logo.png" alt="Cipher Logo" width={32} height={32} />
           )}
