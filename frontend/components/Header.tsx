@@ -31,7 +31,7 @@ export default function Header({
   return (
     <header className="flex justify-center items-center px-4 sm:px-6 py-4 w-full">
       <div className="flex justify-between items-center w-full max-w-6xl">
-        <h1 className="flex justify-center items-center gap-2 text-2xl font-bold leading-none font-lexend">
+        <span className="flex justify-center items-center gap-2 text-xl font-bold leading-none font-lexend">
           {backButton ? (
             <button
               className="p-1 border rounded-full bg-accent hover:bg-accent/70 flex items-center justify-center border-border cursor-pointer transition-colors"
@@ -41,14 +41,14 @@ export default function Header({
               <IconArrowLeft aria-hidden="true" />
             </button>
           ) : (
-            <Image src="/logo.png" alt="Cipher Logo" width={32} height={32} />
+            <Image src="/logo.png" alt="Cipher Logo" width={32} height={32} className="object-contain" />
           )}
           {animation ? (
             <HyperText as="span">{titleText || "CIPHER"}</HyperText>
           ) : (
             <span>{titleText || "Cipher"}</span>
           )}
-        </h1>
+        </span>
         <AnimatedThemeToggler
           variant="hexagon"
           className="p-1 border rounded-full bg-accent hover:bg-accent/70"
