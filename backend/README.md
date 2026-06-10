@@ -6,10 +6,11 @@ colorTo: blue
 sdk: docker
 pinned: false
 app_port: 7860
+short_description: Cryptography Toolkit
 ---
 
 <h1 align="center">
-  <b>🖥️</b>
+  <img src="./app/static/logo.png" alt="🔑" width="64">
   <br>
   <b>Cipher (Backend)</b>
 </h1>
