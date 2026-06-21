@@ -1,5 +1,4 @@
 from fastapi import APIRouter, UploadFile, File, Form
-from fastapi.responses import JSONResponse
 
 from app.cipher.rc5.key import generate_key as rc5_generate_key
 from app.cipher.rc5.encrypt import encrypt as rc5_encrypt
@@ -20,8 +19,7 @@ async def rc5_encrypt_route(
     r: int = Form(12),
 ):
     content = await read_file(file)
-    encrypted = rc5_encrypt(content, key, w, r)
-    return JSONResponse(content=encrypted)
+    return rc5_encrypt(content, key, w, r)
 
 @router.post("/decrypt")
 async def rc5_decrypt_route(
@@ -31,5 +29,4 @@ async def rc5_decrypt_route(
     r: int = Form(12),
 ):
     content = await read_file(file)
-    decrypted = rc5_decrypt(content, key, w, r)
-    return JSONResponse(content=decrypted)
+    return rc5_decrypt(content, key, w, r)

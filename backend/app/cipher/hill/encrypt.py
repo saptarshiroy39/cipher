@@ -4,7 +4,7 @@ def multiply_matrix_vector(matrix: list[list[int]], vector: list[int]) -> list[i
         (matrix[1][0] * vector[0] + matrix[1][1] * vector[1]) % 26,
     ]
 
-def encrypt(plaintext: str, key: dict) -> str:
+def encrypt(plaintext: str, key: dict) -> dict:
     matrix = key["matrix"]
 
     alpha_chars = [ch for ch in plaintext if ch.isascii() and ch.isalpha()]

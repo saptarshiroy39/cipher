@@ -1,6 +1,6 @@
 PLAIN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-def encrypt(plaintext: str, key: str) -> str:
+def encrypt(plaintext: str, key: str) -> dict:
     key = key.upper()
     enc = {PLAIN[i]: key[i] for i in range(26)}
     result = ""

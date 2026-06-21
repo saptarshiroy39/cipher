@@ -1,4 +1,4 @@
-def encrypt(plaintext: str, key: str) -> str:
+def encrypt(plaintext: str, key: str) -> dict:
     result = ""
     key = key.upper()
     key_index = 0
