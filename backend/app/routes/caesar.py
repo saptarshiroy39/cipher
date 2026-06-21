@@ -1,7 +1,7 @@
 import queue
 import threading
 from fastapi import APIRouter, UploadFile, File, Form
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 from app.cipher.caesar.key import generate_key as caesar_generate_key
 from app.cipher.caesar.encrypt import caesar_encrypt
@@ -18,20 +18,17 @@ async def caesar_key_route():
 @router.post("/encrypt")
 async def caesar_encrypt_route(file: UploadFile = File(...), key: int = Form(...)):
     content = await read_file(file)
-    encrypted = caesar_encrypt(content, key)
-    return JSONResponse(content=encrypted)
+    return caesar_encrypt(content, key)
 
 @router.post("/decrypt")
 async def caesar_decrypt_route(file: UploadFile = File(...), key: int = Form(...)):
     content = await read_file(file)
-    decrypted = caesar_decrypt(content, key)
-    return JSONResponse(content=decrypted)
+    return caesar_decrypt(content, key)
 
 @router.post("/attack")
 async def caesar_attack_route(file: UploadFile = File(...)):
     content = await read_file(file)
-    result = caesar_attack(content)
-    return JSONResponse(content=result)
+    return caesar_attack(content)
 
 @router.post("/attack/stream")
 async def caesar_attack_stream(file: UploadFile = File(...)):

@@ -3,7 +3,7 @@ import asyncio
 import queue
 import threading
 from fastapi import APIRouter, UploadFile, File, Form
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 from app.cipher.hill.key import generate_key as hill_generate_key
 from app.cipher.hill.encrypt import encrypt as hill_encrypt
@@ -21,23 +21,20 @@ async def hill_key_route():
 async def hill_encrypt_route(file: UploadFile = File(...), key: str = Form(...)):
     content = await read_file(file)
     key_data = json.loads(key)
-    encrypted = hill_encrypt(content, key_data)
-    return JSONResponse(content=encrypted)
+    return hill_encrypt(content, key_data)
 
 @router.post("/decrypt")
 async def hill_decrypt_route(file: UploadFile = File(...), key: str = Form(...)):
     content = await read_file(file)
     key_data = json.loads(key)
-    decrypted = hill_decrypt(content, key_data)
-    return JSONResponse(content=decrypted)
+    return hill_decrypt(content, key_data)
 
 @router.post("/attack")
 async def hill_attack_route(file: UploadFile = File(...)):
     content = await read_file(file)
-    result = await asyncio.get_running_loop().run_in_executor(
+    return await asyncio.get_running_loop().run_in_executor(
         None, hill_attack, content
     )
-    return JSONResponse(content=result)
 
 @router.post("/attack/stream")
 async def hill_attack_stream(file: UploadFile = File(...)):

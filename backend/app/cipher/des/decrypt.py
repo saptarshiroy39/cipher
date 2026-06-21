@@ -3,7 +3,7 @@ from Crypto.Util.Padding import unpad
 import binascii
 import base64
 
-def decrypt(b64_ciphertext: str, hex_key: str) -> str:
+def decrypt(b64_ciphertext: str, hex_key: str) -> dict:
     key_bytes = binascii.unhexlify(hex_key)
     ciphertext = base64.b64decode(b64_ciphertext)
 

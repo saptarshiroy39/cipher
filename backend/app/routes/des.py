@@ -1,5 +1,4 @@
 from fastapi import APIRouter, UploadFile, File, Form
-from fastapi.responses import JSONResponse
 
 from app.cipher.des.key import generate_key as des_generate_key
 from app.cipher.des.encrypt import encrypt as des_encrypt
@@ -15,11 +14,9 @@ async def des_key_route():
 @router.post("/encrypt")
 async def des_encrypt_route(file: UploadFile = File(...), key: str = Form(...)):
     content = await read_file(file)
-    encrypted = des_encrypt(content, key)
-    return JSONResponse(content=encrypted)
+    return des_encrypt(content, key)
 
 @router.post("/decrypt")
 async def des_decrypt_route(file: UploadFile = File(...), key: str = Form(...)):
     content = await read_file(file)
-    decrypted = des_decrypt(content, key)
-    return JSONResponse(content=decrypted)
+    return des_decrypt(content, key)
