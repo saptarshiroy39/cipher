@@ -1,11 +1,6 @@
 "use client";
 
 export default function Footer() {
-  function playSound() {
-    const audio = new Audio("/faahhh.mp3");
-    audio.play().catch(() => {});
-  }
-
   return (
     <footer className="flex flex-col justify-center items-center gap-2 py-4 text-sm text-muted-foreground">
       <div className="flex justify-center items-center gap-1">
@@ -18,8 +13,7 @@ export default function Footer() {
           SR
         </a>
         <span
-          className="cursor-pointer select-none"
-          onClick={playSound}
+          className="select-none"
           title="🤝"
         >
           🤝

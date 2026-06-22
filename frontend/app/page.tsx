@@ -14,12 +14,6 @@ import {
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const playChestOpenSound = () => {
-    const audio = new Audio("/chest_open.ogg");
-    audio.volume = 0.1;
-    audio.play().catch(() => {});
-  };
-
   const features = [
     {
       title: "Encryption",
@@ -102,7 +96,7 @@ export default function Home() {
               </CardHeader>
               <CardFooter>
                 <Button variant="default" asChild className="w-full">
-                  <Link href={feature.href} onClick={playChestOpenSound}>
+                  <Link href={feature.href}>
                     {feature.buttonText}
                   </Link>
                 </Button>

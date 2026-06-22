@@ -49,17 +49,7 @@ export default function Attack() {
   const [progressStatus, setProgressStatus] = useState("");
   const clearFilesRef = useRef<(() => void) | null>(null);
 
-  const playSound = () => {
-    const audio = new Audio("/enchanting_table.ogg");
-    audio.volume = 0.6;
-    audio.play().catch(() => {});
-  };
 
-  const playCompleteSound = () => {
-    const audio = new Audio("/challenge_complete.ogg");
-    audio.volume = 0.2;
-    audio.play().catch(() => {});
-  };
 
   const handleFileChange = useCallback((f: File | null) => {
     setFile(f);
@@ -84,8 +74,6 @@ export default function Attack() {
 
   const handleAttack = async () => {
     if (!file || !cipherMethod) return;
-
-    playSound();
 
     const formData = new FormData();
     formData.append("file", file);
@@ -190,7 +178,6 @@ export default function Attack() {
       setDownloadFiles(files);
       setTimeTaken((performance.now() - startTime) / 1000);
       setProgress(100);
-      playCompleteSound();
       setState("done");
     } catch (error) {
       console.error("Attack error:", error);

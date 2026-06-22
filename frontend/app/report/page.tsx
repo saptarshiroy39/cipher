@@ -72,11 +72,7 @@ export default function Report() {
   const clearOriginalRef = useRef<(() => void) | null>(null);
   const clearAttackedRef = useRef<(() => void) | null>(null);
 
-  const playSound = () => {
-    const audio = new Audio("/enchanting_table.ogg");
-    audio.volume = 0.6;
-    audio.play().catch(() => {});
-  };
+
 
   const handleOriginalFileChange = useCallback((file: File | null) => {
     setOriginalFile(file);
@@ -121,8 +117,6 @@ export default function Report() {
 
   const handleGenerateReport = async () => {
     if (!originalFile || !attackedFile) return;
-
-    playSound();
 
     const formData = new FormData();
     formData.append("original", originalFile);

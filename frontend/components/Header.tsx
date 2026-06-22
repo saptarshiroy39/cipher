@@ -17,14 +17,7 @@ export default function Header({
 }) {
   const router = useRouter();
 
-  const playChestCloseSound = () => {
-    const audio = new Audio("/chest_close.ogg");
-    audio.volume = 0.2;
-    audio.play().catch(() => {});
-  };
-
   const handleBackClick = () => {
-    playChestCloseSound();
     router.back();
   };
 

@@ -155,10 +155,6 @@ export const AnimatedThemeToggler = ({
     const button = buttonRef.current;
     if (!button) return;
 
-    const audio = new Audio("/button.ogg");
-    audio.volume = 0.3;
-    audio.play().catch(() => {});
-
     const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
 

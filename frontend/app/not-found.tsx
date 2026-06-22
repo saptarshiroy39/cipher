@@ -9,8 +9,6 @@ export default function NotFound() {
   const router = useRouter();
 
   function handleClick() {
-    const audio = new Audio("/faahhh.mp3");
-    audio.play().catch(() => {});
     router.push("/");
   }
 
