@@ -1,9 +1,8 @@
 "use client";
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { MorphingText } from "@/components/ui/morphing-text";
 
 export default function NotFound() {
   const router = useRouter();
@@ -13,24 +12,24 @@ export default function NotFound() {
   }
 
   return (
-    <>
-      <Header />
-      <main
-        id="main"
-        className="flex flex-col items-center justify-center gap-4 min-h-[calc(100vh-9rem)]"
+    <main
+      id="main"
+      className="flex flex-col items-center justify-center gap-12 min-h-screen p-4 text-center font-sans"
+    >
+      <div className="w-full max-w-xl py-6">
+        <MorphingText
+          texts={["404", "Not Found"]}
+          className="text-[#5BAFE3] font-sans font-bold"
+        />
+      </div>
+      <Button
+        size="lg"
+        variant="outline"
+        className="mt-6 text-lg font-sans border-[#5BAFE3] text-[#5BAFE3] hover:bg-[#5BAFE3]/10 hover:text-[#5BAFE3] transition-colors"
+        onClick={handleClick}
       >
-        <h1 className="text-6xl font-bold">404</h1>
-        <h2 className="text-5xl">Not Found</h2>
-        <Button
-          size="lg"
-          variant="outline"
-          className="mt-6 text-lg"
-          onClick={handleClick}
-        >
-          Return Home
-        </Button>
-      </main>
-      <Footer />
-    </>
+        Return Home
+      </Button>
+    </main>
   );
 }
