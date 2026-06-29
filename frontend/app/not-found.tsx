@@ -1,16 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MorphingText } from "@/components/ui/morphing-text";
+import { IconHome } from "@tabler/icons-react";
 
 export default function NotFound() {
-  const router = useRouter();
-
-  function handleClick() {
-    router.push("/");
-  }
-
   return (
     <main
       id="main"
@@ -26,9 +21,12 @@ export default function NotFound() {
         size="lg"
         variant="outline"
         className="mt-6 text-lg font-sans"
-        onClick={handleClick}
+        asChild
       >
-        Return Home
+        <Link href="/">
+          <IconHome className="mr-2 h-5 w-5" />
+          Return Home
+        </Link>
       </Button>
     </main>
   );

@@ -22,7 +22,7 @@ interface Spark {
 }
 
 const ClickSpark: React.FC<ClickSparkProps> = ({
-  sparkColor = "oklch(0.488 0.243 264.376)",
+  sparkColor = "var(--spark-color)",
   sparkSize = 10,
   sparkRadius = 15,
   sparkCount = 8,
@@ -116,7 +116,14 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
         const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
 
-        ctx.strokeStyle = sparkColor;
+        let strokeCol = sparkColor;
+        if (strokeCol.startsWith("var(") && canvas) {
+          const varName = strokeCol.slice(4, -1).trim();
+          strokeCol =
+            window.getComputedStyle(canvas).getPropertyValue(varName).trim() ||
+            "#5BAFE3";
+        }
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(x1, y1);

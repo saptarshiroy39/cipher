@@ -109,7 +109,7 @@ export default function RootLayout({
           enableColorScheme
         >
           <ClickSpark
-            sparkColor="oklch(0.488 0.243 264.376)"
+            sparkColor="var(--spark-color)"
             className="relative min-h-screen w-full flex flex-col"
           >
             {children}
