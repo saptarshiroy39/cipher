@@ -25,7 +25,7 @@ export default function NotFound() {
       <Button
         size="lg"
         variant="outline"
-        className="mt-6 text-lg font-sans border-[#5BAFE3] text-[#5BAFE3] hover:bg-[#5BAFE3]/10 hover:text-[#5BAFE3] transition-colors"
+        className="mt-6 text-lg font-sans"
         onClick={handleClick}
       >
         Return Home
