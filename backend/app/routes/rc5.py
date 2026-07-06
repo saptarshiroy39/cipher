@@ -1,8 +1,8 @@
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, File, Form, UploadFile
 
-from app.cipher.rc5.key import generate_key as rc5_generate_key
-from app.cipher.rc5.encrypt import encrypt as rc5_encrypt
 from app.cipher.rc5.decrypt import decrypt as rc5_decrypt
+from app.cipher.rc5.encrypt import encrypt as rc5_encrypt
+from app.cipher.rc5.key import generate_key as rc5_generate_key
 from app.routes._helpers import read_file
 
 router = APIRouter(prefix="/rc5", tags=["rc5"])

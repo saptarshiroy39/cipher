@@ -1,6 +1,7 @@
-import binascii
 import base64
+import binascii
 import struct
+
 
 class RC5:
     def __init__(self, key_bytes, w=32, r=12):

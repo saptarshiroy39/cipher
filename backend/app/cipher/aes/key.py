@@ -1,5 +1,6 @@
-import os
 import binascii
+import os
+
 
 def generate_key(bits: int = 128) -> str:
     if bits not in (128, 192, 256):

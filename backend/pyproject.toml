@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cipher-backend"
+version = "0.1.0"
+description = "Classic cryptography toolkit backend."
+authors = [
+    {name = "Saptarshi Roy"},
+    {name = "Krishnendu Das"}
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.3",
+    "uvicorn[standard]>=0.34.0",
+    "gunicorn>=23.0.0",
+    "pydantic>=2.10.5",
+    "pydantic-settings>=2.13.1",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.22",
+    "httpx>=0.28.1",
+    "pycryptodome>=3.23.0",
+    "websockets>=16.0",
+    "sse-starlette>=2.1.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "RUF"]
+ignore = ["E501", "N803", "N806", "RUF059"]

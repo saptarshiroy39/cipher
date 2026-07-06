@@ -1,5 +1,6 @@
-import secrets
 import math
+import secrets
+
 
 def generate_key() -> dict:
     while True:

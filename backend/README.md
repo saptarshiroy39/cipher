@@ -87,7 +87,8 @@ backend/
 │   │   ├── rc5/        # RC5
 │   │   └── report.py   # Report generation logic
 │   └── static/         # Static files
-├── requirements.txt    # Python dependencies
+├── pyproject.toml      # Python project configuration
+├── uv.lock             # Dependency lockfile
 └── .env.example        # Environment variables template
 ```
 
@@ -98,21 +99,11 @@ cd backend
 ```
 
 ```bash
-uv venv .venv
+uv sync
 ```
 
 ```bash
-.venv\Scripts\activate       # Windows
-# OR
-source .venv/bin/activate    # Linux / macOS
-```
-
-```bash
-uv pip install -r requirements.txt
-```
-
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 - 🚀 [**_`API`_**](http://localhost:8000) - API runs at [`localhost:8000`](http://localhost:8000)

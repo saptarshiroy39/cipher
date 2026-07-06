@@ -1,5 +1,6 @@
-import os
 import binascii
+import os
+
 
 def generate_key(b: int = 16) -> str:
     if not (0 <= b <= 255):

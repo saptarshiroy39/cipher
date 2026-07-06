@@ -1,8 +1,8 @@
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, File, Form, UploadFile
 
-from app.cipher.des.key import generate_key as des_generate_key
-from app.cipher.des.encrypt import encrypt as des_encrypt
 from app.cipher.des.decrypt import decrypt as des_decrypt
+from app.cipher.des.encrypt import encrypt as des_encrypt
+from app.cipher.des.key import generate_key as des_generate_key
 from app.routes._helpers import read_file
 
 router = APIRouter(prefix="/des", tags=["des"])

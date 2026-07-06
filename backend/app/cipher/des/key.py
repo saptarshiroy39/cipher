@@ -1,5 +1,6 @@
-import os
 import binascii
+import os
+
 
 def generate_key() -> str:
     binary_key = os.urandom(8)
