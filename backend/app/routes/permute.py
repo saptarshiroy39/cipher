@@ -1,14 +1,15 @@
 import asyncio
 import queue
 import threading
-from fastapi import APIRouter, UploadFile, File, Form
+
+from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import StreamingResponse
 
-from app.cipher.permute.key import generate_key as permute_generate_key
-from app.cipher.permute.encrypt import encrypt as permute_encrypt
-from app.cipher.permute.decrypt import decrypt as permute_decrypt
 from app.cipher.permute.attack import frequency_attack
-from app.routes._helpers import read_file, _run_attack_with_progress, _sse_generator
+from app.cipher.permute.decrypt import decrypt as permute_decrypt
+from app.cipher.permute.encrypt import encrypt as permute_encrypt
+from app.cipher.permute.key import generate_key as permute_generate_key
+from app.routes._helpers import _run_attack_with_progress, _sse_generator, read_file
 
 router = APIRouter(prefix="/permute", tags=["permute"])
 

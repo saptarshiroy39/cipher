@@ -1,8 +1,10 @@
+import base64
+import binascii
+import os
+
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
-import binascii
-import base64
-import os
+
 
 def encrypt(plaintext: str, hex_key: str) -> dict:
     key_bytes = binascii.unhexlify(hex_key)

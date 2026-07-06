@@ -1,8 +1,8 @@
-import json
 import asyncio
-import threading
-import queue
+import json
+
 from fastapi import UploadFile
+
 
 async def read_file(file: UploadFile) -> str:
     raw = await file.read()
