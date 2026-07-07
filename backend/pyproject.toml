@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cipher-backend"
-version = "0.1.0"
-description = "Classic cryptography toolkit backend."
+version = "1.0.0"
+description = "Cryptography Toolkit"
 authors = [
     {name = "Saptarshi Roy"},
     {name = "Krishnendu Das"}
