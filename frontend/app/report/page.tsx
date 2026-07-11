@@ -72,8 +72,6 @@ export default function Report() {
   const clearOriginalRef = useRef<(() => void) | null>(null);
   const clearAttackedRef = useRef<(() => void) | null>(null);
 
-
-
   const handleOriginalFileChange = useCallback((file: File | null) => {
     setOriginalFile(file);
   }, []);

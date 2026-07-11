@@ -49,8 +49,6 @@ export default function Attack() {
   const [progressStatus, setProgressStatus] = useState("");
   const clearFilesRef = useRef<(() => void) | null>(null);
 
-
-
   const handleFileChange = useCallback((f: File | null) => {
     setFile(f);
   }, []);

@@ -34,7 +34,13 @@ export default function Header({
               <IconArrowLeft aria-hidden="true" />
             </button>
           ) : (
-            <Image src="/logo.png" alt="Cipher Logo" width={32} height={32} className="object-contain" />
+            <Image
+              src="/logo.png"
+              alt="Cipher Logo"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
           )}
           {animation ? (
             <HyperText as="span">{titleText || "CIPHER"}</HyperText>
