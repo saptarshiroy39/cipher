@@ -55,30 +55,24 @@ export default function Home() {
           </h1>
           <h2 className="flex flex-wrap justify-center items-center gap-2 font-semibold">
             <span>Supported Ciphers:</span>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              Caesar
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              Permutation
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              Vigenère
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              Playfair (8x8)
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              Hill (2x2)
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              DES
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              AES
-            </Badge>
-            <Badge variant="secondary" className="text-sm border-gray-500">
-              RC5
-            </Badge>
+            {[
+              "Caesar",
+              "Permutation",
+              "Playfair (8x8)",
+              "Hill (2x2)",
+              "Vigenère",
+              "RC5",
+              "DES",
+              "AES",
+            ].map((cipher) => (
+              <Badge
+                key={cipher}
+                variant="secondary"
+                className="text-sm border-gray-500 rounded-full text-[#2563EB] dark:text-sky-400 bg-[#FBFBF9] dark:bg-neutral-900/50"
+              >
+                {cipher}
+              </Badge>
+            ))}
           </h2>
         </div>
 
@@ -96,9 +90,7 @@ export default function Home() {
               </CardHeader>
               <CardFooter>
                 <Button variant="default" asChild className="w-full">
-                  <Link href={feature.href}>
-                    {feature.buttonText}
-                  </Link>
+                  <Link href={feature.href}>{feature.buttonText}</Link>
                 </Button>
               </CardFooter>
             </Card>

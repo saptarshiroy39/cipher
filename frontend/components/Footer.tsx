@@ -12,10 +12,7 @@ export default function Footer() {
         >
           SR
         </a>
-        <span
-          className="select-none"
-          title="🤝"
-        >
+        <span className="select-none" title="🤝">
           🤝
         </span>
         <a

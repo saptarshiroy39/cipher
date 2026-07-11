@@ -56,8 +56,6 @@ export default function Decrypt() {
   const [keyCopied, setKeyCopied] = useState(false);
   const clearFilesRef = useRef<(() => void) | null>(null);
 
-
-
   const handleFileChange = useCallback((file: File | null) => {
     setFormState((prev) => ({ ...prev, file }));
   }, []);
