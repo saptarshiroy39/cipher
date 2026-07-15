@@ -41,7 +41,7 @@ export default function OG() {
               <Badge
                 key={cipher}
                 variant="secondary"
-                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-full font-medium"
+                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-lg font-medium"
               >
                 {cipher}
               </Badge>
@@ -52,7 +52,7 @@ export default function OG() {
               <Badge
                 key={cipher}
                 variant="secondary"
-                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-full font-medium"
+                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-lg font-medium"
               >
                 {cipher}
               </Badge>

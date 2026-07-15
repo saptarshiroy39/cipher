@@ -29,7 +29,7 @@
 
 Cipher uses a decoupled architecture with a **Next.js** frontend and a **FastAPI** backend, connected over REST with real-time **SSE streaming** for frequency analysis attacks. All 8 cipher implementations live in the modular `cipher/` Python package, each handling encrypt, decrypt, key generation, and (where applicable) attack logic independently.
 
-![Cipher](./frontend/public/banner.png)
+![Cipher](./frontend/public/Cipher.png)
 
 ---
 

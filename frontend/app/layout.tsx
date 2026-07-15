@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Lexend, Oxanium } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import Figlet from "@/components/Figlet";
@@ -16,13 +16,25 @@ const lexend = Lexend({
   weight: ["400", "500", "600", "700"],
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1115" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://cipher.hirishi.in"),
   title: "Cipher",
   description:
-    "A complete toolkit for Cryptography. Encrypt, Decrypt, Run Frequency Analysis Attack and Generate Report with ease.",
+    "A complete toolkit for Cryptography. Encrypt, Decrypt, Frequency Analysis Attack & Generate Report with ease.",
+  applicationName: "Cipher",
   keywords: [
     "Cipher",
+    "cipher.hirishi.in",
+    "https://cipher.hirishi.in",
     "Cryptography",
     "Encryption",
     "Decryption",
@@ -37,16 +49,15 @@ export const metadata: Metadata = {
     "DES",
     "AES",
     "RC5",
-    "Anabas Labs",
     "Saptarshi Roy",
     "saptarshiroy39",
-    "Krishnendu Das",
-    "itskdhere",
+    "hirishi",
+    "hirishi.in",
+    "https://hirishi.in",
   ],
   robots: "index, follow",
-  creator: "Anabas Labs",
+  creator: "Saptarshi Roy",
   authors: [
-    { name: "Anabas Labs", url: "https://cipher.hirishi.in" },
     { name: "Saptarshi Roy", url: "https://hirishi.in" },
     { name: "Krishnendu Das", url: "https://itskdhere.com" },
   ],
@@ -54,12 +65,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cipher",
     description:
-      "A complete toolkit for Cryptography. Encrypt, Decrypt, Run Frequency Analysis Attack and Generate Report with ease.",
+      "A complete toolkit for Cryptography. Encrypt, Decrypt, Frequency Analysis Attack & Generate Report with ease.",
     url: "https://cipher.hirishi.in",
     siteName: "Cipher",
     images: [
       {
-        url: "https://cipher.hirishi.in/banner.png",
+        url: "https://cipher.hirishi.in/OG.png",
         width: 1200,
         height: 630,
         alt: "Cipher",
@@ -73,9 +84,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cipher",
     description:
-      "A complete toolkit for Cryptography. Encrypt, Decrypt, Run Frequency Analysis Attack and Generate Report with ease.",
-    images: ["https://cipher.hirishi.in/banner.png"],
-    creator: "@anabaslabs",
+      "A complete toolkit for Cryptography. Encrypt, Decrypt, Frequency Analysis Attack & Generate Report with ease.",
+    images: ["https://cipher.hirishi.in/OG.png"],
+    site: "@saptarshiroy39",
+    creator: "@saptarshiroy39",
   },
 
   icons: {
