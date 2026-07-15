@@ -12,9 +12,7 @@ export default function Footer() {
         >
           SR
         </a>
-        <span className="select-none" title="🤝">
-          🤝
-        </span>
+        <span className="select-none">•</span>
         <a
           href="https://itskdhere.com"
           target="_blank"
