@@ -18,9 +18,9 @@ import {
   IconPercentage,
   IconAbc,
   IconLineHeight,
-  IconAlphabetLatin,
+  IconLetterCase,
   IconRuler2,
-  IconPresentationAnalytics,
+  IconReportAnalytics,
   IconDeviceAnalytics,
   IconX,
 } from "@tabler/icons-react";
@@ -248,7 +248,7 @@ export default function Report() {
                 </div>
               )}
               <div className="flex items-center gap-1 leading-none">
-                <IconPresentationAnalytics
+                <IconReportAnalytics
                   className="size-4 inline-block"
                   aria-hidden="true"
                 />
@@ -283,7 +283,7 @@ export default function Report() {
                 Word Accuracy: <b>{reportStats.wordAccuracy}</b>
               </div>
               <div className="flex items-center gap-1 leading-none">
-                <IconAlphabetLatin
+                <IconLetterCase
                   className="size-4 inline-block"
                   aria-hidden="true"
                 />
