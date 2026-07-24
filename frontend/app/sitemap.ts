@@ -1,34 +1,36 @@
 import type { MetadataRoute } from "next";
 
+const lastModified = new Date();
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: "https://cipher.hirishi.in",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      lastModified,
+      changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: "https://cipher.hirishi.in/encrypt",
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: "https://cipher.hirishi.in/decrypt",
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: "https://cipher.hirishi.in/attack",
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: "https://cipher.hirishi.in/report",
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },
