@@ -15,7 +15,7 @@ export default function OG() {
 
   return (
     <>
-      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-white dark:bg-background text-foreground p-6">
+      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-card text-foreground p-6">
         <div className="flex max-w-6xl flex-col items-center justify-center gap-4 text-center">
           <h1 className="mb-2 flex items-center justify-center gap-2 text-2xl leading-none font-bold">
             <Image
@@ -25,7 +25,7 @@ export default function OG() {
               height={64}
               className="object-contain"
             />
-            <span className="font-lexend text-6xl text-foreground">CIPHER</span>
+            <span className="font-mono text-6xl text-foreground">CIPHER</span>
           </h1>
 
           <h1 className="text-muted-foreground text-2xl font-bold tracking-tight">
@@ -33,7 +33,7 @@ export default function OG() {
           </h1>
 
           <h2 className="mb-4 text-3xl font-medium tracking-tight text-foreground">
-            Encrypt • Decrypt • Frequency Analysis Attack • Generate Report.
+            Encrypt • Decrypt • Frequency Analysis Attack • Generate Report
           </h2>
 
           <h3 className="flex flex-wrap items-center justify-center gap-2 font-semibold">
@@ -41,7 +41,7 @@ export default function OG() {
               <Badge
                 key={cipher}
                 variant="secondary"
-                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-lg font-medium"
+                className="bg-primary text-primary-foreground p-3 text-lg h-auto rounded-none font-medium border-0"
               >
                 {cipher}
               </Badge>
@@ -52,7 +52,7 @@ export default function OG() {
               <Badge
                 key={cipher}
                 variant="secondary"
-                className="border-gray-500 dark:border-neutral-700 bg-[#FBFBF9] dark:bg-neutral-900/50 p-3 text-lg text-[#2563EB] dark:text-sky-400 h-auto rounded-lg font-medium"
+                className="bg-primary text-primary-foreground p-3 text-lg h-auto rounded-none font-medium border-0"
               >
                 {cipher}
               </Badge>

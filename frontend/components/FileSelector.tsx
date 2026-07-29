@@ -88,7 +88,7 @@ export default function FileSelector({
 
         <div className="flex flex-col items-center justify-center text-center">
           <div
-            className="mb-2 flex size-12 shrink-0 items-center justify-center border rounded-full bg-background"
+            className="mb-2 flex size-12 shrink-0 items-center justify-center border rounded-none bg-background"
             aria-hidden="true"
           >
             <IconFilePlus className="size-6 opacity-60" />

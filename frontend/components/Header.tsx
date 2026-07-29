@@ -23,8 +23,8 @@ export default function Header({
 
   return (
     <header className="flex justify-center items-center px-4 sm:px-6 py-4 w-full">
-      <div className="flex justify-between items-center w-full max-w-6xl">
-        <span className="flex justify-center items-center gap-2 text-xl font-bold leading-none font-lexend">
+      <div className="relative flex justify-between items-center w-full max-w-6xl">
+        <span className="flex justify-center items-center gap-2 text-xl font-bold leading-none font-mono">
           {backButton ? (
             <button
               className="p-1 border rounded-full bg-accent hover:bg-accent/70 flex items-center justify-center border-border cursor-pointer transition-colors"
@@ -48,6 +48,27 @@ export default function Header({
             <span>{titleText || "Cipher"}</span>
           )}
         </span>
+
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center gap-1 text-sm text-muted-foreground font-mono">
+          <a
+            href="https://hirishi.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground transition-colors"
+          >
+            SR
+          </a>
+          <span className="select-none">•</span>
+          <a
+            href="https://itskdhere.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground transition-colors"
+          >
+            KD
+          </a>
+        </div>
+
         <AnimatedThemeToggler
           variant="hexagon"
           className="p-1 border rounded-full bg-accent hover:bg-accent/70"

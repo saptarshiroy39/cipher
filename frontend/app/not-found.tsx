@@ -9,23 +9,23 @@ export default function NotFound() {
   return (
     <main
       id="main"
-      className="flex flex-col items-center justify-center gap-12 min-h-screen p-4 text-center font-sans"
+      className="flex flex-col items-center justify-center gap-12 min-h-screen p-4 text-center font-sans bg-card"
     >
       <div className="w-full max-w-xl py-6">
         <MorphingText
           texts={["404", "Not Found"]}
-          className="text-[#5BAFE3] font-sans font-bold"
+          className="text-primary font-sans font-bold"
         />
       </div>
       <Button
         size="lg"
-        variant="outline"
+        variant="default"
         className="mt-6 text-lg font-sans"
         asChild
       >
         <Link href="/">
           <IconHome className="mr-2 h-5 w-5" />
-          Return Home
+          RETURN HOME
         </Link>
       </Button>
     </main>
