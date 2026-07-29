@@ -170,7 +170,7 @@ export default function Encrypt() {
           },
         },
       );
-      console.log(response);
+
 
       const files: DownloadFile[] = [];
       const baseName = formState.file?.name.replace(/\.[^.]+$/, "") || "file";
@@ -406,7 +406,7 @@ export default function Encrypt() {
                     ) : (
                       <IconDice5 className="size-4" aria-hidden="true" />
                     )}
-                    Random
+                    RANDOM
                   </Button>
                 </ButtonGroup>
               </Field>
@@ -430,21 +430,21 @@ export default function Encrypt() {
                     className="size-4 animate-spin"
                     aria-hidden="true"
                   />
-                  Encrypting...
+                  ENCRYPTING...
                 </>
               ) : state === "done" ? (
                 <>
                   <IconCheck className="size-4" aria-hidden="true" />
-                  Encrypted
+                  ENCRYPTED
                 </>
               ) : state === "error" ? (
                 <>
                   <IconX className="size-4" aria-hidden="true" />
-                  Failed
+                  FAILED
                 </>
               ) : (
                 <>
-                  <IconLock className="size-4" aria-hidden="true" /> Encrypt
+                  <IconLock className="size-4" aria-hidden="true" /> ENCRYPT
                 </>
               )}
             </Button>
@@ -461,7 +461,7 @@ export default function Encrypt() {
               onClick={handleClear}
             >
               <IconReload className="size-4" aria-hidden="true" />
-              Reset
+              RESET
             </Button>
           </div>
         </div>
@@ -546,7 +546,7 @@ export default function Encrypt() {
                 onClick={handleClear}
               >
                 <IconReload className="size-4" aria-hidden="true" />
-                Encrypt Another File
+                ENCRYPT ANOTHER FILE
               </Button>
             </div>
           </div>
@@ -564,7 +564,7 @@ export default function Encrypt() {
               variant="outline"
               onClick={() => setState("idle")}
             >
-              Try Again
+              TRY AGAIN
             </Button>
           </div>
         )}

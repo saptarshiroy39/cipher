@@ -191,22 +191,22 @@ export default function Report() {
                     className="size-4 animate-spin"
                     aria-hidden="true"
                   />
-                  Generating...
+                  GENERATING...
                 </>
               ) : state === "done" ? (
                 <>
                   <IconCheck className="size-4" aria-hidden="true" />
-                  Generated
+                  GENERATED
                 </>
               ) : state === "error" ? (
                 <>
                   <IconX className="size-4" aria-hidden="true" />
-                  Failed
+                  FAILED
                 </>
               ) : (
                 <>
                   <IconDeviceAnalytics className="size-4" aria-hidden="true" />
-                  Generate Report
+                  GENERATE REPORT
                 </>
               )}
             </Button>
@@ -221,7 +221,7 @@ export default function Report() {
               onClick={handleClear}
             >
               <IconReload className="size-4" aria-hidden="true" />
-              Reset
+              RESET
             </Button>
           </div>
         </div>
@@ -312,7 +312,7 @@ export default function Report() {
                 onClick={handleClear}
               >
                 <IconReload className="size-4" aria-hidden="true" />
-                Another Report
+                ANOTHER REPORT
               </Button>
             </div>
           </div>
@@ -330,7 +330,7 @@ export default function Report() {
               variant="outline"
               onClick={() => setState("idle")}
             >
-              Try Again
+              TRY AGAIN
             </Button>
           </div>
         )}

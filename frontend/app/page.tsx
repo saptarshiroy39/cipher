@@ -11,34 +11,34 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import Footer from "@/components/Footer";
+
 
 export default function Home() {
   const features = [
     {
-      title: "Encryption",
-      buttonText: "Encrypt",
+      title: "ENCRYPTION",
+      buttonText: "ENCRYPT",
       href: "/encrypt",
       description:
         "Secure your text using a custom key. Keeps formatting fully intact.",
     },
     {
-      title: "Decryption",
-      buttonText: "Decrypt",
+      title: "DECRYPTION",
+      buttonText: "DECRYPT",
       href: "/decrypt",
       description:
         "Unlock encrypted text with your key. Recover the original message.",
     },
     {
-      title: "Frequency Analysis Attack",
-      buttonText: "Attack",
+      title: "FREQUENCY ANALYSIS ATTACK",
+      buttonText: "ATTACK",
       href: "/attack",
       description:
         "Analyze ciphertext patterns automatically. Reveal likely letter substitutions.",
     },
     {
-      title: "Generate Comparison Report",
-      buttonText: "Generate",
+      title: "GENERATE COMPARISON REPORT",
+      buttonText: "GENERATE",
       href: "/report",
       description:
         "Compile insights into a clean summary. Export a ready-to-submit report.",
@@ -58,8 +58,8 @@ export default function Home() {
             {[
               "Caesar",
               "Permutation",
-              "Playfair (8x8)",
-              "Hill (2x2)",
+              "Playfair(8x8)",
+              "Hill(2x2)",
               "Vigenère",
               "RC5",
               "DES",
@@ -68,7 +68,7 @@ export default function Home() {
               <Badge
                 key={cipher}
                 variant="secondary"
-                className="text-sm border-gray-500 rounded-full text-[#2563EB] dark:text-sky-400 bg-[#FBFBF9] dark:bg-neutral-900/50"
+                className="text-sm border-gray-500 rounded-none text-primary bg-card"
               >
                 {cipher}
               </Badge>
@@ -97,7 +97,6 @@ export default function Home() {
           ))}
         </div>
       </main>
-      <Footer />
     </>
   );
 }

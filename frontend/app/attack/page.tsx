@@ -254,22 +254,22 @@ export default function Attack() {
                       className="size-4 animate-spin"
                       aria-hidden="true"
                     />
-                    Attacking...
+                    ATTACKING...
                   </>
                 ) : state === "done" ? (
                   <>
                     <IconCheck className="size-4" aria-hidden="true" />
-                    Attacked
+                    ATTACKED
                   </>
                 ) : state === "error" ? (
                   <>
                     <IconX className="size-4" aria-hidden="true" />
-                    Failed
+                    FAILED
                   </>
                 ) : (
                   <>
                     <IconSkull className="size-4" aria-hidden="true" />
-                    Attack
+                    ATTACK
                   </>
                 )}
               </Button>
@@ -284,7 +284,7 @@ export default function Attack() {
                 onClick={handleClear}
               >
                 <IconReload className="size-4" aria-hidden="true" />
-                Reset
+                RESET
               </Button>
             </Field>
           </div>
@@ -373,7 +373,7 @@ export default function Attack() {
                 onClick={handleClear}
               >
                 <IconReload className="size-4" aria-hidden="true" />
-                Attack Another File
+                ATTACK ANOTHER FILE
               </Button>
             </div>
           </div>
@@ -391,7 +391,7 @@ export default function Attack() {
               variant="outline"
               onClick={() => setState("idle")}
             >
-              Try Again
+              TRY AGAIN
             </Button>
           </div>
         )}

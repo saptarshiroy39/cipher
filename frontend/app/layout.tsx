@@ -1,19 +1,16 @@
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata, Viewport } from "next";
-import { Lexend, Oxanium } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import Figlet from "@/components/Figlet";
 import "./globals.css";
 import { cn } from "@/lib/cn";
 import ClickSpark from "@/components/ui/click-spark";
 
-const oxanium = Oxanium({ subsets: ["latin"], variable: "--font-sans" });
-
-const lexend = Lexend({
-  variable: "--font-lexend",
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-mono",
 });
 
 export const viewport: Viewport = {
@@ -110,7 +107,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(oxanium.variable, lexend.variable)}
+      className={cn("font-mono", geistMono.variable)}
     >
       <body className="font-sans antialiased">
         <ThemeProvider

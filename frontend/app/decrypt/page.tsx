@@ -127,7 +127,7 @@ export default function Decrypt() {
           },
         },
       );
-      console.log(response);
+
 
       const files: DownloadFile[] = [];
       const baseName = formState.file?.name.replace(/\.[^.]+$/, "") || "file";
@@ -339,18 +339,15 @@ export default function Decrypt() {
                       setFormState((prev) => {
                         const next = { ...prev, decryptionKey: keyVal };
 
-                        // Auto-update key sizes based on hex length (2 hex chars = 1 byte).
                         const bytes = Math.ceil(keyVal.length / 2);
 
                         if (bytes > 0) {
                           if (bytes <= 32) {
-                            // AES matching
                             if (bytes <= 16) next.aesSize = "128";
                             else if (bytes <= 24) next.aesSize = "192";
                             else next.aesSize = "256";
                           }
 
-                          // RC5 clamping
                           next.rc5B = Math.max(0, Math.min(255, bytes));
                         }
 
@@ -383,7 +380,7 @@ export default function Decrypt() {
                     }}
                   >
                     <IconClipboard className="size-4" aria-hidden="true" />
-                    Paste Key
+                    PASTE KEY
                   </Button>
                 </ButtonGroup>
               </Field>
@@ -407,22 +404,22 @@ export default function Decrypt() {
                     className="size-4 animate-spin"
                     aria-hidden="true"
                   />
-                  Decrypting...
+                  DECRYPTING...
                 </>
               ) : state === "done" ? (
                 <>
                   <IconCheck className="size-4" aria-hidden="true" />
-                  Decrypted
+                  DECRYPTED
                 </>
               ) : state === "error" ? (
                 <>
                   <IconX className="size-4" aria-hidden="true" />
-                  Failed
+                  FAILED
                 </>
               ) : (
                 <>
                   <IconLockOpen2 className="size-4" aria-hidden="true" />{" "}
-                  Decrypt
+                  DECRYPT
                 </>
               )}
             </Button>
@@ -439,7 +436,7 @@ export default function Decrypt() {
               onClick={handleClear}
             >
               <IconReload className="size-4" aria-hidden="true" />
-              Reset
+              RESET
             </Button>
           </div>
         </div>
@@ -524,7 +521,7 @@ export default function Decrypt() {
                 onClick={handleClear}
               >
                 <IconReload className="size-4" aria-hidden="true" />
-                Decrypt Another File
+                DECRYPT ANOTHER FILE
               </Button>
             </div>
           </div>
@@ -542,7 +539,7 @@ export default function Decrypt() {
               variant="outline"
               onClick={() => setState("idle")}
             >
-              Try Again
+              TRY AGAIN
             </Button>
           </div>
         )}
