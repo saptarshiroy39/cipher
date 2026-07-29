@@ -34,3 +34,6 @@ line-length = 88
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "RUF"]
 ignore = ["E501", "N803", "N806", "RUF059"]
+
+[tool.setuptools]
+packages = ["app"]
