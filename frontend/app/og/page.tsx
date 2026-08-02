@@ -15,7 +15,7 @@ export default function OG() {
 
   return (
     <>
-      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-card text-foreground p-6">
+      <main className="flex min-h-screen w-full flex-col items-center justify-center gap-8 bg-sidebar text-foreground p-6">
         <div className="flex max-w-6xl flex-col items-center justify-center gap-4 text-center">
           <h1 className="mb-2 flex items-center justify-center gap-2 text-2xl leading-none font-bold">
             <Image

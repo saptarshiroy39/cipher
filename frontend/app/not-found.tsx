@@ -9,7 +9,7 @@ export default function NotFound() {
   return (
     <main
       id="main"
-      className="flex flex-col items-center justify-center gap-12 min-h-screen p-4 text-center font-sans bg-card"
+      className="flex flex-col items-center justify-center gap-12 min-h-screen p-4 text-center font-sans bg-sidebar"
     >
       <div className="w-full max-w-xl py-6">
         <MorphingText
