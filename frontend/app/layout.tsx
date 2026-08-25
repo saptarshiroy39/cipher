@@ -6,8 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Figlet from "@/components/Figlet";
 import "./globals.css";
 import { cn } from "@/lib/cn";
-import ClickSpark from "@/components/ui/click-spark";
-
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
@@ -117,12 +115,9 @@ export default function RootLayout({
           disableTransitionOnChange
           enableColorScheme
         >
-          <ClickSpark
-            sparkColor="var(--spark-color)"
-            className="relative min-h-screen w-full flex flex-col"
-          >
+          <div className="relative min-h-screen w-full flex flex-col">
             {children}
-          </ClickSpark>
+          </div>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
