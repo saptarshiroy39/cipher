@@ -4,13 +4,13 @@ import threading
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import StreamingResponse
 
-from app.cipher.caesar.attack import caesar_attack
-from app.cipher.caesar.decrypt import caesar_decrypt
-from app.cipher.caesar.encrypt import caesar_encrypt
-from app.cipher.caesar.key import generate_key as caesar_generate_key
+from app.services.caesar.attack import caesar_attack
+from app.services.caesar.decrypt import caesar_decrypt
+from app.services.caesar.encrypt import caesar_encrypt
+from app.services.caesar.key import generate_key as caesar_generate_key
 from app.routes._helpers import _run_attack_with_progress, _sse_generator, read_file
 
-router = APIRouter(prefix="/caesar", tags=["caesar"])
+router = APIRouter(prefix="/caesar", tags=["Caesar Cipher"])
 
 @router.get("/key")
 async def caesar_key_route():

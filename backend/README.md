@@ -1,5 +1,5 @@
 ---
-title: Cipher
+title: cipher
 emoji: 🔑
 colorFrom: gray
 colorTo: blue
@@ -76,7 +76,7 @@ backend/
 │   │   ├── aes.py      # AES routes
 │   │   ├── rc5.py      # RC5 routes
 │   │   └── report.py   # Report & favicon routes
-│   ├── cipher/         # Cipher implementations
+│   ├── services/       # Cipher implementations
 │   │   ├── caesar/     # Caesar cipher (encrypt, decrypt, attack)
 │   │   ├── permute/    # Permutation cipher
 │   │   ├── vigenere/   # Vigenère cipher
@@ -85,7 +85,7 @@ backend/
 │   │   ├── des/        # DES
 │   │   ├── aes/        # AES
 │   │   ├── rc5/        # RC5
-│   │   └── report.py   # Report generation logic
+│   │   └── report/     # Report generation logic (compare.py)
 │   └── static/         # Static files
 ├── pyproject.toml      # Python project configuration
 ├── uv.lock             # Dependency lockfile

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, File, UploadFile
 from fastapi.responses import PlainTextResponse
 
-from app.cipher.report import compare
+from app.services.report.compare import compare
 from app.routes._helpers import get_name, read_file
 
-router = APIRouter()
+router = APIRouter(tags=["Report"])
 
 
 @router.post("/report")

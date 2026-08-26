@@ -1,11 +1,11 @@
 from fastapi import APIRouter, File, Form, UploadFile
 
-from app.cipher.aes.decrypt import decrypt as aes_decrypt
-from app.cipher.aes.encrypt import encrypt as aes_encrypt
-from app.cipher.aes.key import generate_key as aes_generate_key
+from app.services.aes.decrypt import decrypt as aes_decrypt
+from app.services.aes.encrypt import encrypt as aes_encrypt
+from app.services.aes.key import generate_key as aes_generate_key
 from app.routes._helpers import read_file
 
-router = APIRouter(prefix="/aes", tags=["aes"])
+router = APIRouter(prefix="/aes", tags=["AES"])
 
 @router.get("/key")
 async def aes_key_route(bits: int = 128):

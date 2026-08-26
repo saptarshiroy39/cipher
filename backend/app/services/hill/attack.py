@@ -90,7 +90,7 @@ def hill_attack(ciphertext: str, progress_callback=None) -> dict:
             best_key = [[a, b], [c, d]]
 
     if best_key:
-        from app.cipher.hill.decrypt import decrypt
+        from app.services.hill.decrypt import decrypt
 
         key_data = {"size": 2, "matrix": best_key}
         full_plaintext = decrypt(ciphertext, key_data)
