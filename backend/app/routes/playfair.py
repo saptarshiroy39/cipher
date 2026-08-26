@@ -1,11 +1,11 @@
 from fastapi import APIRouter, File, Form, UploadFile
 
-from app.cipher.playfair.decrypt import decrypt as playfair_decrypt
-from app.cipher.playfair.encrypt import encrypt as playfair_encrypt
-from app.cipher.playfair.key import generate_key as playfair_generate_key
+from app.services.playfair.decrypt import decrypt as playfair_decrypt
+from app.services.playfair.encrypt import encrypt as playfair_encrypt
+from app.services.playfair.key import generate_key as playfair_generate_key
 from app.routes._helpers import read_file
 
-router = APIRouter(prefix="/playfair", tags=["playfair"])
+router = APIRouter(prefix="/playfair", tags=["Playfair Cipher (8x8)"])
 
 @router.get("/key")
 async def playfair_key_route():

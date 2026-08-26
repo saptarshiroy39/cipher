@@ -5,13 +5,13 @@ import threading
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import StreamingResponse
 
-from app.cipher.permute.attack import frequency_attack
-from app.cipher.permute.decrypt import decrypt as permute_decrypt
-from app.cipher.permute.encrypt import encrypt as permute_encrypt
-from app.cipher.permute.key import generate_key as permute_generate_key
+from app.services.permute.attack import frequency_attack
+from app.services.permute.decrypt import decrypt as permute_decrypt
+from app.services.permute.encrypt import encrypt as permute_encrypt
+from app.services.permute.key import generate_key as permute_generate_key
 from app.routes._helpers import _run_attack_with_progress, _sse_generator, read_file
 
-router = APIRouter(prefix="/permute", tags=["permute"])
+router = APIRouter(prefix="/permute", tags=["Permutation Cipher"])
 
 @router.get("/key")
 async def permute_key_route():

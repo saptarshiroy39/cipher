@@ -5,13 +5,13 @@ import threading
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import StreamingResponse
 
-from app.cipher.vigenere.attack import vigenere_attack
-from app.cipher.vigenere.decrypt import decrypt as vigenere_decrypt
-from app.cipher.vigenere.encrypt import encrypt as vigenere_encrypt
-from app.cipher.vigenere.key import generate_key as vigenere_generate_key
+from app.services.vigenere.attack import vigenere_attack
+from app.services.vigenere.decrypt import decrypt as vigenere_decrypt
+from app.services.vigenere.encrypt import encrypt as vigenere_encrypt
+from app.services.vigenere.key import generate_key as vigenere_generate_key
 from app.routes._helpers import _run_attack_with_progress, _sse_generator, read_file
 
-router = APIRouter(prefix="/vigenere", tags=["vigenere"])
+router = APIRouter(prefix="/vigenere", tags=["Vigenère Cipher"])
 
 @router.get("/key")
 async def vigenere_key_route():

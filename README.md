@@ -67,7 +67,7 @@ Cipher/
 │       ├── main.py         # FastAPI app entry point
 │       ├── config.py       # App configuration
 │       ├── routes/         # API route definitions (one file per cipher)
-│       ├── cipher/         # Cipher implementations
+│       ├── services/       # Cipher implementations
 │       │   ├── caesar/     # Caesar cipher (encrypt, decrypt, attack)
 │       │   ├── permute/    # Permutation cipher
 │       │   ├── vigenere/   # Vigenère cipher
@@ -76,7 +76,7 @@ Cipher/
 │       │   ├── des/        # DES
 │       │   ├── aes/        # AES
 │       │   ├── rc5/        # RC5
-│       │   └── report.py   # Report generation
+│       │   └── report/     # Report generation
 │       └── static/         # Static files
 ├── README.md
 └── .gitignore

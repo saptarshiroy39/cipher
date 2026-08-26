@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.config import APP_NAME, APP_VERSION, CORS_ORIGINS, ENV
+from app.config import APP_NAME, APP_VERSION, CORS_ORIGINS
 from app.routes.aes import router as aes_router
 from app.routes.caesar import router as caesar_router
 from app.routes.des import router as des_router
@@ -19,9 +19,6 @@ from app.routes.vigenere import router as vigenere_router
 app = FastAPI(
     title=APP_NAME,
     version=APP_VERSION,
-    docs_url=None if ENV == "production" else "/docs",
-    redoc_url=None if ENV == "production" else "/redoc",
-    openapi_url=None if ENV == "production" else "/openapi.json",
 )
 
 app.add_middleware(
@@ -33,6 +30,10 @@ app.add_middleware(
     expose_headers=["Content-Disposition"],
 )
 
+@app.get("/")
+async def root():
+    return {"name": APP_NAME, "version": APP_VERSION, "status": "OK"}
+
 app.include_router(report_router)
 app.include_router(caesar_router)
 app.include_router(permute_router)
@@ -42,11 +43,6 @@ app.include_router(hill_router)
 app.include_router(des_router)
 app.include_router(aes_router)
 app.include_router(rc5_router)
-
-@app.get("/")
-@app.head("/") # UptimeRobot
-async def root():
-    return {"name": APP_NAME, "version": APP_VERSION, "status": "OK"}
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
