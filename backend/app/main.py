@@ -37,12 +37,12 @@ async def root():
 app.include_router(report_router)
 app.include_router(caesar_router)
 app.include_router(permute_router)
-app.include_router(vigenere_router)
 app.include_router(playfair_router)
 app.include_router(hill_router)
+app.include_router(vigenere_router)
+app.include_router(rc5_router)
 app.include_router(des_router)
 app.include_router(aes_router)
-app.include_router(rc5_router)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
