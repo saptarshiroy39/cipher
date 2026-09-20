@@ -1,15 +1,25 @@
 import asyncio
 import json
 
-from fastapi import UploadFile
+from fastapi import HTTPException, UploadFile
+
+from app.config import MAX_FILE_SIZE
 
 
 async def read_file(file: UploadFile) -> str:
+    if file.size and file.size > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+
     raw = await file.read()
+
+    if len(raw) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+
     try:
         return raw.decode("utf-8")
     except UnicodeDecodeError:
         return raw.decode("cp1252", errors="replace")
+
 
 def get_name(file: UploadFile) -> str:
     name = file.filename or "file"

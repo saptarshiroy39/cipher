@@ -14,6 +14,8 @@ import {
 
 export type State = "idle" | "processing" | "done" | "error";
 
+export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MiB
+
 export function truncateFilename(name: string): string {
   if (name.length <= 50) return name;
   const dotIndex = name.lastIndexOf(".");
@@ -50,7 +52,7 @@ export default function FileSelector({
     multiple: false,
     accept: "text/plain",
     maxFiles: 1,
-    maxSize: 10 * 1024 * 1024, // 10 MB
+    maxSize: MAX_FILE_SIZE,
   });
 
   useEffect(() => {
