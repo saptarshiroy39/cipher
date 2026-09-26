@@ -15,6 +15,7 @@ import {
 export type State = "idle" | "processing" | "done" | "error";
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MiB
+export const MAX_FILE_COUNT = 1;
 
 export function truncateFilename(name: string): string {
   if (name.length <= 50) return name;
@@ -51,7 +52,7 @@ export default function FileSelector({
   ] = useFileUpload({
     multiple: false,
     accept: "text/plain",
-    maxFiles: 1,
+    maxFiles: MAX_FILE_COUNT,
     maxSize: MAX_FILE_SIZE,
   });
 
