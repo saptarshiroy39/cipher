@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
@@ -64,14 +65,18 @@ export default function Home() {
               "RC5",
               "DES",
               "AES",
-            ].map((cipher) => (
-              <Badge
-                key={cipher}
-                variant="secondary"
-                className="text-sm border-gray-500 rounded-none text-primary bg-card"
-              >
-                {cipher}
-              </Badge>
+            ].map((cipher, index) => (
+              <Fragment key={cipher}>
+                {index > 0 && (
+                  <span className="text-muted-foreground select-none">•</span>
+                )}
+                <Badge
+                  variant="secondary"
+                  className="text-sm border-gray-500 rounded-none text-primary bg-card"
+                >
+                  {cipher}
+                </Badge>
+              </Fragment>
             ))}
           </h2>
         </div>
