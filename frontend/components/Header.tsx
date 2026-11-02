@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { HyperText } from "@/components/ui/hyper-text";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { IconArrowLeft } from "@tabler/icons-react";
 
 export default function Header({
@@ -69,9 +69,9 @@ export default function Header({
           </a>
         </div>
 
-        <AnimatedThemeToggler
-          variant="hexagon"
-          className="p-1 border rounded-full bg-accent hover:bg-accent/70"
+        <ThemeToggle
+          className="shrink-0 aspect-square"
+          title="Toggle theme"
         />
       </div>
     </header>
